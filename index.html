@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharaoh | Premium Digital Solutions</title>
+    <meta name="description" content="Advanced digital tools and services for modern needs">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #ec4899;
+            --dark: #111827;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 20%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .logo::before, .logo::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .logo::before {
+            left: -2rem;
+        }
+        
+        .logo::after {
+            right: -2rem;
+        }
+        
+        .subtitle {
+            color: var(--gray);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            animation: pulseShadow 3s infinite;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .card-divider {
+            color: var(--primary);
+            opacity: 0.5;
+            font-size: 1.2rem;
+            animation: spin 4s linear infinite;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature {
+            background: rgba(31, 41, 55, 0.6);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .feature-text {
+            font-weight: 500;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .action-btn {
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .action-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        
+        .action-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+        
+        .action-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .note {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            animation: fadeIn 2s ease-out;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes pulseShadow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Hover animations */
+        .action-success:hover {
+            animation: pulseSuccess 1s infinite;
+        }
+        
+        .action-warning:hover {
+            animation: pulseWarning 1s infinite;
+        }
+        
+        .action-danger:hover {
+            animation: pulseDanger 1s infinite;
+        }
+        
+        @keyframes pulseSuccess {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+        }
+        
+        @keyframes pulseWarning {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+        }
+        
+        @keyframes pulseDanger {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .features-grid, .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">PHARAOH</h1>
+            <p class="subtitle">Premium digital solutions and tools for modern creators and developers</p>
+            <a href="https://discord.gg/tQrz6hFh4W" class="btn btn-primary">
+                <i class="fab fa-discord"></i> Join Our Community
+            </a>
+        </header>
+        
+        <main>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-divider">⎔</span>
+                    <h2 class="card-title">MAIN GENERATOR</h2>
+                    <span class="card-divider">⎔</span>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature">
+                        <i class="fab fa-tiktok fa-spin"></i>
+                        <span class="feature-text">TikTok-Supported</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fab fa-chrome fa-spin"></i>
+                        <span class="feature-text">Chrome-Supported</span>
+                    </div>
+                </div>
+                
+                <div class="actions-grid">
+                    <a href="https://is.gd/IhmGJR" class="action-btn action-success">
+                        <i class="fas fa-cog fa-spin"></i> Generator
+                    </a>
+                    <a href="https://is.gd/w0cBrX" class="action-btn action-warning">
+                        <i class="fas fa-link fa-bounce"></i> Hyperlink
+                    </a>
+                    <a href="https://is.gd/hClyXG" class="action-btn action-danger">
+                        <i class="fas fa-sync-alt fa-spin"></i> Refresher
+                    </a>
+                </div>
+                
+                <p class="note">If the services are temporarily unavailable, please be patient as we're working to resolve any issues.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-divider">✧</span>
+                    <h2 class="card-title">TUTORIALS & GUIDES</h2>
+                    <span class="card-divider">✧</span>
+                </div>
+                
+                <div class="actions-grid" style="grid-template-columns: 1fr;">
+                    <a href="https://www.tiktok.com/@pharaohbe4m" class="action-btn" style="background: rgba(0, 0, 0, 0.3); color: white; border: 1px solid var(--primary);">
+                        <i class="fas fa-video"></i> Video Tutorials
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Add subtle animation to features on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const features = document.querySelectorAll('.feature');
+            const actionBtns = document.querySelectorAll('.action-btn');
+            
+            // Stagger feature animations
+            features.forEach((feature, index) => {
+                feature.style.animationDelay = `${index * 0.1}s`;
+                feature.style.animation = 'slideUp 0.5s ease-out forwards';
+                feature.style.opacity = '0';
+            });
+            
+            // Stagger button animations
+            actionBtns.forEach((btn, index) => {
+                btn.style.animationDelay = `${0.3 + index * 0.1}s`;
+                btn.style.animation = 'slideUp 0.5s ease-out forwards';
+                btn.style.opacity = '0';
+            });
+            
+            // Add ripple effect to buttons
+            actionBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const x = e.clientX - e.target.getBoundingClientRect().left;
+                    const y = e.clientY - e.target.getBoundingClientRect().top;
+                    
+                    const ripple = document.createElement('span');
+                    ripple.className = 'ripple';
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
