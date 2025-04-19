@@ -232,6 +232,28 @@
             background: linear-gradient(to right, transparent, var(--bright-red), transparent);
         }
         
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--white);
+            text-shadow: 0 0 8px var(--bright-red);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--bright-red), transparent);
+        }
+        
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -308,6 +330,47 @@
             color: var(--bright-red);
         }
         
+        .tools-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tool-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem;
+            border-radius: 0.5rem;
+            background: rgba(139, 0, 0, 0.3);
+            color: var(--white);
+            border: 1px solid var(--bright-red);
+            text-align: center;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+        }
+        
+        .tool-btn:hover {
+            background: rgba(255, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
+        }
+        
+        .tool-btn i {
+            color: var(--bright-red);
+            font-size: 1.5rem;
+        }
+        
         .stats-card {
             background: rgba(139, 0, 0, 0.3);
             border-radius: 0.75rem;
@@ -348,52 +411,14 @@
             letter-spacing: 1px;
         }
         
-        .tutorial-section {
-            margin-top: 2rem;
-            text-align: center;
-        }
-        
-        .tutorial-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            padding: 1rem 2.5rem;
-            border-radius: 0.5rem;
-            background: rgba(139, 0, 0, 0.3);
-            color: var(--white);
-            border: 1px solid var(--bright-red);
-            text-align: center;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
-        }
-        
-        .tutorial-btn:hover {
-            background: rgba(255, 0, 0, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
-        }
-        
-        .tutorial-btn i {
-            color: var(--bright-red);
-            font-size: 1.5rem;
-        }
-        
-        /* Update Bell */
+        /* Enhanced Update Bell */
         .update-bell {
             position: fixed;
             top: 25px;
             right: 25px;
-            background: rgba(139, 0, 0, 0.7);
-            width: 55px;
-            height: 55px;
+            background: rgba(255, 0, 0, 0.8);
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -401,20 +426,22 @@
             cursor: pointer;
             z-index: 100;
             transition: all 0.3s ease;
-            border: 1px solid var(--bright-red);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            animation: pulse 2s infinite;
+            border: 2px solid var(--bright-red);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), 0 0 40px rgba(255, 0, 0, 0.3);
+            animation: pulse 1.5s infinite;
         }
         
         .update-bell:hover {
-            transform: scale(1.1) rotate(15deg);
-            background: rgba(255, 0, 0, 0.8);
+            transform: scale(1.15) rotate(15deg);
+            background: rgba(255, 0, 0, 0.9);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 0, 0, 0.4);
             animation: none;
         }
         
         .update-bell i {
             color: var(--white);
-            font-size: 1.5rem;
+            font-size: 2rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
         
         .notification-badge {
@@ -424,14 +451,16 @@
             background-color: var(--white);
             color: var(--dark-red);
             border-radius: 50%;
-            width: 25px;
-            height: 25px;
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: 1rem;
             font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--bright-red);
+            animation: pulse 1s infinite alternate;
         }
         
         /* Update Modal */
@@ -552,6 +581,28 @@
             .card {
                 padding: 1.5rem;
             }
+            
+            .tools-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .update-bell {
+                width: 55px;
+                height: 55px;
+                top: 15px;
+                right: 15px;
+            }
+            
+            .update-bell i {
+                font-size: 1.5rem;
+            }
+            
+            .notification-badge {
+                width: 25px;
+                height: 25px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -559,10 +610,10 @@
     <!-- Scanlines Effect -->
     <div class="scanlines"></div>
     
-    <!-- Update Bell -->
+    <!-- Enhanced Update Bell -->
     <div class="update-bell" id="updateBell">
         <i class="fas fa-bell"></i>
-        <div class="notification-badge">1</div>
+        <div class="notification-badge">2</div>
     </div>
     
     <div class="container">
@@ -603,9 +654,14 @@
                 </div>
             </div>
             
-            <div class="tutorial-section">
-                <a href="https://pomf2.lain.la/f/ndf7ma0z.mp4" class="tutorial-btn" target="_blank" rel="noopener noreferrer">
+            <div class="section-title">TOOLS</div>
+            
+            <div class="tools-buttons">
+                <a href="https://pomf2.lain.la/f/ndf7ma0z.mp4" class="tool-btn" target="_blank" rel="noopener noreferrer">
                     <i class="fas fa-video"></i> Video Tutorial
+                </a>
+                <a href="https://pharaoh-webhook-tool.vercel.app/" class="tool-btn" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-bolt"></i> Webhook Spam
                 </a>
             </div>
             
@@ -636,11 +692,10 @@
                     <div class="update-date">19/04/2025</div>
                     <div class="update-text">
                         <ul>
-                            <li>Complete redesign with red/black cyberpunk theme</li>
-                            <li>Added glitch effects and scanlines for retro-futuristic feel</li>
-                            <li>Implemented smooth animations and transitions throughout</li>
-                            <li>Changed video tutorial to direct link</li>
-                            <li>Improved visual feedback for all interactive elements</li>
+                            <li>Enhanced update bell with more visibility and notification badge</li>
+                            <li>Added new "TOOLS" section with Webhook Spam tool</li>
+                            <li>Improved visual hierarchy and button styling</li>
+                            <li>Updated notification badge to show 2 updates</li>
                         </ul>
                     </div>
                 </div>
