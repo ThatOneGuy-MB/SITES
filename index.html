@@ -791,5 +791,32 @@
             fetchOnlineCount();
         });
     </script>
+    <!-- Linkvertise Anti-Bypass Protection -->
+<script>
+// Extract hash from URL (e.g., ?hash=abc123)
+const urlParams = new URLSearchParams(window.location.search);
+const hash = urlParams.get('hash');
+
+// Replace with YOUR Linkvertise monetized link
+const LINKVERTISE_LINK = "https://linkvertise.com/YOUR_LINK_ID";
+
+// If no hash, redirect to Linkvertise
+if (!hash) {
+    window.location.href = LINKVERTISE_LINK;
+} else {
+    // Check hash via API
+    fetch(`/api/verify?hash=${hash}`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data.access) {
+                window.location.href = LINKVERTISE_LINK; // ❌ Block invalid hash
+            }
+            // If access=true, do nothing (allow page to load)
+        })
+        .catch(() => {
+            window.location.href = LINKVERTISE_LINK; // Fallback redirect
+        });
+}
+</script>
 </body>
 </html>
