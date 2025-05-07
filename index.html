@@ -791,38 +791,5 @@
             fetchOnlineCount();
         });
     </script>
-    <!-- Add before </body> in index.html -->
-<script>
-  (function() {
-    // Extract hash from URL
-    const params = new URLSearchParams(window.location.search);
-    const hash = params.get('hash');
-
-    if (!hash) {
-      // No hash provided, block access
-      document.body.innerHTML = '<div style="text-align: center; color: #FF0000; font-family: Orbitron, sans-serif;"><h1>Access Denied</h1><p>Please use the official Linkvertise link: <a href="https://link-hub.net/1294617/beam-link-educational" style="color: #FF3333;">Click here</a>.</p></div>';
-      return;
-    }
-
-    // Send hash to backend for verification
-    fetch('/api/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ hash })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (!data.valid) {
-          // Invalid hash, block access
-          document.body.innerHTML = '<div style="text-align: center; color: #FF0000; font-family: Orbitron, sans-serif;"><h1>Invalid Access</h1><p>Verification failed. Please use the official Linkvertise link: <a href="https://link-hub.net/1294617/beam-link-educational" style="color: #FF3333;">Click here</a>.</p></div>';
-        }
-        // Valid hash: page loads normally
-      })
-      .catch(error => {
-        console.error('Verification error:', error);
-        document.body.innerHTML = '<div style="text-align: center; color: #FF0000; font-family: Orbitron, sans-serif;"><h1>Error</h1><p>Verification failed. Please try again later.</p></div>';
-      });
-  })();
-</script>
 </body>
 </html>
