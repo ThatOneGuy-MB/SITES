@@ -11,8 +11,12 @@ export default async (req, res) => {
     return res.status(400).json({ valid: false, error: 'Invalid hash' });
   }
 
-  // Linkvertise authentication token
-  const authToken = '2a0519d7a2c69e320e54fe34d99a649772bdf32f73a7ab128c881768009ed6ff';
+  // Get Linkvertise authentication token from environment variable
+  const authToken = process.env.LINKVERTISE_TOKEN;
+
+  if (!authToken) {
+    return res.status(500).json({ valid: false, error: 'Server configuration error' });
+  }
 
   try {
     // Send POST request to Linkvertise Anti-Bypassing API
