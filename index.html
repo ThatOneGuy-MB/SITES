@@ -799,7 +799,7 @@
     const hash = params.get('hash');
 
     if (!hash) {
-      // No hash, redirect to Linkvertise
+      console.log('No hash provided, redirecting to Linkvertise');
       window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
       return;
     }
@@ -810,17 +810,22 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ hash })
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        return response.json();
+      })
       .then(data => {
         if (!data.valid) {
-          // Invalid hash, redirect to Linkvertise
+          console.log('Invalid hash, redirecting to Linkvertise:', data.error);
           window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
+        } else {
+          console.log('Hash verified successfully');
         }
-        // Valid hash: page loads normally
       })
       .catch(error => {
-        // Log error for debugging, redirect to Linkvertise
-        console.error('Verification error:', error);
+        console.error('Verification error:', error.message);
         window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
       });
   })();
