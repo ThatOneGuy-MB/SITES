@@ -19,7 +19,7 @@ export default async (req, res) => {
   }
 
   try {
-    // Send POST request to Linkvertise Anti-Bypassing API
+    // Send POST request to Linkvertise Anti-Bypassing API using global fetch
     const response = await fetch('https://publisher.linkvertise.com/api/v1/anti_bypassing', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
