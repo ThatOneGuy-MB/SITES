@@ -20,16 +20,13 @@ export default async (req, res) => {
   }
 
   try {
-    // Construct URL with token and hash as query parameters
-    const url = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${encodeURIComponent(authToken)}&hash=${encodeURIComponent(hash)}`;
-
-    // Send POST request to Linkvertise Anti-Bypassing API
-    const response = await fetch(url, {
+    // Send POST request to Linkvertise Anti-Bypassing API with token and hash in body
+    const response = await fetch('https://publisher.linkvertise.com/api/v1/anti_bypassing', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      }
-      // No body, as parameters are in the query string
+      },
+      body: JSON.stringify({ token: authToken, hash })
     });
 
     const responseBody = await response.text();
@@ -54,7 +51,7 @@ export default async (req, res) => {
     if (data === true) {
       return res.status(200).json({ valid: true });
     } else if (data === false) {
-      return res.status(200).json({ valid: false, error: 'Hash not found' }); // Changed to 200, as FALSE is a valid response
+      return res.status(200).json({ valid: false, error: 'Hash not found' });
     } else {
       return res.status(403).json({ valid: false, error: data || 'Invalid token' });
     }
