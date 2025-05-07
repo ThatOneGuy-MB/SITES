@@ -791,8 +791,7 @@
             fetchOnlineCount();
         });
     </script>
-    <!-- In index.html, before </body> -->
-<script>
+    <script>
   (function() {
     // Extract hash from URL
     const params = new URLSearchParams(window.location.search);
@@ -804,6 +803,8 @@
       return;
     }
 
+    console.log('Hash detected:', hash);
+
     // Send hash to Vercel serverless function for verification
     fetch('/api/verify', {
       method: 'POST',
@@ -811,12 +812,14 @@
       body: JSON.stringify({ hash })
     })
       .then(response => {
+        console.log('API response status:', response.status);
         if (!response.ok) {
           throw new Error(`HTTP error ${response.status}`);
         }
         return response.json();
       })
       .then(data => {
+        console.log('API response data:', data);
         if (!data.valid) {
           console.log('Invalid hash, redirecting to Linkvertise:', data.error);
           window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
