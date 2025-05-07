@@ -1,5 +1,5 @@
 export default async (req, res) => {
-  // Enable CORS and set JSON response
+  // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'application/json');
 
@@ -11,23 +11,34 @@ export default async (req, res) => {
   }
 
   try {
-    // Verify with Linkvertise API
-    const apiUrl = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${TOKEN}&hash=${hash}`;
-    const response = await fetch(apiUrl);
-    
-    if (!response.ok) throw new Error(`API error: ${response.status}`);
-    
+    // New: Add User-Agent header which Linkvertise requires
+    const response = await fetch(
+      `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${TOKEN}&hash=${hash}`,
+      {
+        headers: {
+          'User-Agent': 'Linkvertise-Verification/1.0'
+        }
+      }
+    );
+
+    // More detailed error handling
+    if (!response.ok) {
+      const errorData = await response.text();
+      throw new Error(`Linkvertise API responded with ${response.status}: ${errorData}`);
+    }
+
     const data = await response.text();
     return res.status(200).json({ 
       access: data === "true",
       hash: hash // For debugging
     });
-    
+
   } catch (error) {
-    console.error('Verification error:', error);
+    console.error('Full verification error:', error);
     return res.status(500).json({ 
       error: "Verification failed",
-      details: error.message
+      details: error.message,
+      suggestion: "Check your token and API endpoint"
     });
   }
 };
