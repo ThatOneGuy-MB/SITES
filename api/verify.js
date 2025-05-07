@@ -20,20 +20,26 @@ export default async (req, res) => {
   }
 
   try {
-    // Send POST request to Linkvertise Anti-Bypassing API with token and hash in body
+    // Prepare form data
+    const formData = new URLSearchParams();
+    formData.append('token', authToken);
+    formData.append('hash', hash);
+
+    // Send POST request to Linkvertise Anti-Bypassing API with form data
     const response = await fetch('https://publisher.linkvertise.com/api/v1/anti_bypassing', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: JSON.stringify({ token: authToken, hash })
+      body: formData.toString()
     });
 
     const responseBody = await response.text();
     console.log('Linkvertise API response:', {
       status: response.status,
       headers: Object.fromEntries(response.headers.entries()),
-      body: responseBody
+      body: responseBody,
+      timestamp: new Date().toISOString()
     });
 
     if (!response.ok) {
@@ -56,7 +62,10 @@ export default async (req, res) => {
       return res.status(403).json({ valid: false, error: data || 'Invalid token' });
     }
   } catch (error) {
-    console.error('Error in /api/verify:', error.message);
+    console.error('Error in /api/verify:', {
+      message: error.message,
+      timestamp: new Date().toISOString()
+    });
     return res.status(500).json({ valid: false, error: `Server error: ${error.message}` });
   }
 };
