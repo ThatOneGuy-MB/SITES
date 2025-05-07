@@ -790,32 +790,63 @@
             setupStats();
             fetchOnlineCount();
         });
-    </script>
-    <!-- Linkvertise Anti-Bypass Protection -->
-<script>
-// Extract hash from URL (e.g., ?hash=abc123)
+    <script>
+// Configuration
+const LINKVERTISE_LINK = "Yhttps://link-hub.net/1294617/beam-link-educational"; // REPLACE THIS
+const MAX_RETRIES = 2;
+const RETRY_DELAY = 1000; // 1 second between retries
+
+// Get hash from URL
 const urlParams = new URLSearchParams(window.location.search);
 const hash = urlParams.get('hash');
 
-// Replace with YOUR Linkvertise monetized link
-const LINKVERTISE_LINK = "https://link-hub.net/1294617/beam-link-educational";
+console.log('Anti-Bypass Check Started');
+console.log('Hash from URL:', hash);
 
-// If no hash, redirect to Linkvertise
+// If no hash, redirect immediately
 if (!hash) {
-    window.location.href = LINKVERTISE_LINK;
+  console.log('No hash found - redirecting to Linkvertise');
+  window.location.href = LINKVERTISE_LINK;
 } else {
-    // Check hash via API
-    fetch(`/api/verify?hash=${hash}`)
-        .then(res => res.json())
-        .then(data => {
-            if (!data.access) {
-                window.location.href = LINKVERTISE_LINK; // ❌ Block invalid hash
-            }
-            // If access=true, do nothing (allow page to load)
-        })
-        .catch(() => {
-            window.location.href = LINKVERTISE_LINK; // Fallback redirect
-        });
+  // Try verification with retries
+  verifyHash(hash, MAX_RETRIES);
+}
+
+async function verifyHash(hash, retriesLeft) {
+  try {
+    console.log(`Verifying hash (attempt ${MAX_RETRIES-retriesLeft+1} of ${MAX_RETRIES})`);
+    
+    const apiUrl = `/api/verify?hash=${hash}`;
+    console.log('API URL:', apiUrl);
+    
+    const response = await fetch(apiUrl);
+    console.log('API Response Status:', response.status);
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('API Response Data:', data);
+
+    if (data.access) {
+      console.log('Hash verified - access granted');
+      // Access granted - do nothing
+    } else {
+      console.log('Invalid hash - redirecting to Linkvertise');
+      window.location.href = LINKVERTISE_LINK;
+    }
+  } catch (error) {
+    console.error('Verification failed:', error);
+    
+    if (retriesLeft > 0) {
+      console.log(`Retrying in ${RETRY_DELAY}ms...`);
+      setTimeout(() => verifyHash(hash, retriesLeft - 1), RETRY_DELAY);
+    } else {
+      console.log('Max retries reached - redirecting to Linkvertise');
+      window.location.href = LINKVERTISE_LINK;
+    }
+  }
 }
 </script>
 </body>
