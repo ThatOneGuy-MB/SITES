@@ -26,11 +26,17 @@ export default async (req, res) => {
       body: JSON.stringify({ token: authToken, hash })
     });
 
+    const responseBody = await response.text(); // Get raw response
+    console.log('Linkvertise API response:', {
+      status: response.status,
+      body: responseBody
+    });
+
     if (!response.ok) {
-      throw new Error(`Linkvertise API responded with status ${response.status}`);
+      throw new Error(`Linkvertise API responded with status ${response.status}: ${responseBody}`);
     }
 
-    const data = await response.json();
+    const data = JSON.parse(responseBody);
 
     if (data === true) {
       return res.status(200).json({ valid: true });
