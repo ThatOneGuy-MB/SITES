@@ -15,31 +15,32 @@ export default async (req, res) => {
   const authToken = process.env.LINKVERTISE_TOKEN;
 
   if (!authToken) {
-    return res.status(500).json({ valid: false, error: 'Server configuration error' });
+    return res.status(500).json({ valid: false, error: 'Missing LINKVERTISE_TOKEN environment variable' });
   }
 
   try {
-    // Send POST request to Linkvertise Anti-Bypassing API using global fetch
+    // Send POST request to Linkvertise Anti-Bypassing API
     const response = await fetch('https://publisher.linkvertise.com/api/v1/anti_bypassing', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: authToken, hash })
     });
 
+    if (!response.ok) {
+      throw new Error(`Linkvertise API responded with status ${response.status}`);
+    }
+
     const data = await response.json();
 
     if (data === true) {
-      // Hash is valid
       return res.status(200).json({ valid: true });
     } else if (data === false) {
-      // Hash not found
       return res.status(403).json({ valid: false, error: 'Hash not found' });
     } else {
-      // Invalid token or other error
       return res.status(403).json({ valid: false, error: data || 'Invalid token' });
     }
   } catch (error) {
-    console.error('API error:', error);
-    return res.status(500).json({ valid: false, error: 'Server error' });
+    console.error('Error in /api/verify:', error.message);
+    return res.status(500).json({ valid: false, error: `Server error: ${error.message}` });
   }
 };
