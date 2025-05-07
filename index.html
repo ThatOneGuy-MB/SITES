@@ -790,38 +790,64 @@
             setupStats();
             fetchOnlineCount();
         });
-    </script>
-        <!-- Previous scripts... -->
-
-    <!-- Linkvertise Anti-Bypass Protection -->
     <script>
-    // Configuration
-    const LINKVERTISE_URL = "https://link-hub.net/1294617/beam-link-educational";
-    
-    // 1. Immediate redirect if no hash
-    const urlParams = new URLSearchParams(window.location.search);
-    if (!urlParams.has('hash')) {
-        window.location.replace(LINKVERTISE_URL); // IMMEDIATE redirect
-        throw new Error("Redirecting to Linkvertise - no hash found");
-    }
+// Configuration
+const LINKVERTISE_URL = "https://link-hub.net/1294617/beam-link-educational";
+const MAX_RETRIES = 2;
+const RETRY_DELAY = 1000;
 
-    // 2. Verify hash if present
-    (async () => {
-        try {
-            const response = await fetch(`/api/verify?hash=${urlParams.get('hash')}`);
-            const result = await response.json();
-            
-            if (!result.access) {
-                window.location.replace(LINKVERTISE_URL);
-            }
-            // If access=true, do nothing (allow page to load)
-            
-        } catch (error) {
-            console.error("Verification failed:", error);
-            window.location.replace(LINKVERTISE_URL);
-        }
-    })();
-    </script>
+// Debug logging
+console.log('Starting Anti-Bypass verification...');
+
+// Get hash from URL
+const urlParams = new URLSearchParams(window.location.search);
+const hash = urlParams.get('hash');
+
+// Immediate redirect if no hash
+if (!hash) {
+  console.log('No hash found - redirecting to Linkvertise');
+  window.location.href = LINKVERTISE_URL;
+} else {
+  console.log('Hash found:', hash);
+  verifyHash(hash, MAX_RETRIES);
+}
+
+// Verification with retry logic
+async function verifyHash(hash, retriesLeft) {
+  try {
+    console.log(`Verifying hash (${MAX_RETRIES-retriesLeft+1}/${MAX_RETRIES} attempt)`);
+    
+    const response = await fetch(`/api/verify?hash=${hash}`);
+    console.log('API response status:', response.status);
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const result = await response.json();
+    console.log('API response data:', result);
+    
+    if (result.access) {
+      console.log('✅ Hash verified - access granted');
+      return; // Success!
+    }
+    
+    // If no access but no error
+    console.log('❌ Invalid hash - redirecting');
+    window.location.href = LINKVERTISE_URL;
+    
+  } catch (error) {
+    console.error('Verification attempt failed:', error);
+    
+    if (retriesLeft > 0) {
+      console.log(`Retrying in ${RETRY_DELAY}ms...`);
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+      return verifyHash(hash, retriesLeft - 1);
+    }
+    
+    console.log('Max retries reached - redirecting');
+    window.location.href = LINKVERTISE_URL;
+  }
+}
+</script>
 </body> <!-- THIS MUST BE THE VERY NEXT LINE AFTER THE SCRIPT -->
 </html>
 
