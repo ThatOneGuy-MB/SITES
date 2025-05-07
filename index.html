@@ -791,5 +791,37 @@
             fetchOnlineCount();
         });
     </script>
-</body>
+        <!-- Previous scripts... -->
+
+    <!-- Linkvertise Anti-Bypass Protection -->
+    <script>
+    // Configuration
+    const LINKVERTISE_URL = "https://link-hub.net/1294617/beam-link-educational";
+    
+    // 1. Immediate redirect if no hash
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.has('hash')) {
+        window.location.replace(LINKVERTISE_URL); // IMMEDIATE redirect
+        throw new Error("Redirecting to Linkvertise - no hash found");
+    }
+
+    // 2. Verify hash if present
+    (async () => {
+        try {
+            const response = await fetch(`/api/verify?hash=${urlParams.get('hash')}`);
+            const result = await response.json();
+            
+            if (!result.access) {
+                window.location.replace(LINKVERTISE_URL);
+            }
+            // If access=true, do nothing (allow page to load)
+            
+        } catch (error) {
+            console.error("Verification failed:", error);
+            window.location.replace(LINKVERTISE_URL);
+        }
+    })();
+    </script>
+</body> <!-- THIS MUST BE THE VERY NEXT LINE AFTER THE SCRIPT -->
 </html>
+
