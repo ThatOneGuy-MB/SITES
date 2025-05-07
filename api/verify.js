@@ -15,6 +15,7 @@ export default async (req, res) => {
   const authToken = process.env.LINKVERTISE_TOKEN;
 
   if (!authToken) {
+    console.error('LINKVERTISE_TOKEN is missing');
     return res.status(500).json({ valid: false, error: 'Missing LINKVERTISE_TOKEN environment variable' });
   }
 
@@ -22,13 +23,17 @@ export default async (req, res) => {
     // Send POST request to Linkvertise Anti-Bypassing API
     const response = await fetch('https://publisher.linkvertise.com/api/v1/anti_bypassing', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: authToken, hash })
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ hash })
     });
 
-    const responseBody = await response.text(); // Get raw response
+    const responseBody = await response.text();
     console.log('Linkvertise API response:', {
       status: response.status,
+      headers: Object.fromEntries(response.headers.entries()),
       body: responseBody
     });
 
