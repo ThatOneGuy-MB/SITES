@@ -791,39 +791,5 @@
             fetchOnlineCount();
         });
     </script>
-    <!-- Add before </body> in index.html -->
-<script>
-  (function() {
-    // Extract hash from URL
-    const params = new URLSearchParams(window.location.search);
-    const hash = params.get('hash');
-
-    if (!hash) {
-      // No hash, redirect to Linkvertise
-      window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
-      return;
-    }
-
-    // Send hash to backend for verification
-    fetch('/api/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ hash })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (!data.valid) {
-          // Invalid hash, redirect to Linkvertise
-          window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
-        }
-        // Valid hash: page loads normally
-      })
-      .catch(error => {
-        console.error('Verification error:', error);
-        // Redirect on error
-        window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
-      });
-  })();
-</script>
 </body>
 </html>
