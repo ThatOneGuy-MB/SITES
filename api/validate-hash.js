@@ -1,32 +1,41 @@
-// api/validate-hash.js
+<script>
+    // Check if there's a 'hash' in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const hash = urlParams.get('hash');  // Get the 'hash' from the URL
 
-export default async function handler(req, res) {
-    const { token, hash } = req.query;
+    if (hash) {
+        // Linkvertise API URL
+        const apiUrl = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=d05d2b0e7c867c569a0c86a2c4c2559a851eaa8f1f905b5f61b70daab5e8f7ef&hash=${hash}`;
 
-    if (!token || !hash) {
-        return res.status(400).send('Missing token or hash.');
-    }
-
-    // Your Linkvertise API endpoint
-    const url = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=d05d2b0e7c867c569a0c86a2c4c2559a851eaa8f1f905b5f61b70daab5e8f7ef&hash=${hash}`;
-
-    try {
-        // Send POST request to Linkvertise API
-        const response = await fetch(url, {
+        // Send the POST request to validate the hash
+        fetch(apiUrl, {
             method: 'POST',
+        })
+        .then(response => response.json())  // Parse the response as JSON
+        .then(data => {
+            if (data.status === 'success') {
+                // If the hash is validated, show the "ACCESS MAIN SITE" message
+                document.getElementById('page-content').innerHTML = `
+                    <h2>ACCESS MAIN SITE</h2>
+                    <a href="https://app.genn.lu/auth/pharaohbe4m" target="_blank" style="font-size: 18px; color: green;">
+                        Click here to access the main site
+                    </a>
+                `;
+            } else {
+                // If validation fails, show an error message
+                document.getElementById('page-content').innerHTML = `
+                    <h2>Error: Invalid Hash</h2>
+                    <p>The hash provided is not valid. Please try again.</p>
+                `;
+            }
+        })
+        .catch(error => {
+            // If there's an error with the fetch request
+            console.error('Error validating hash:', error);
+            document.getElementById('page-content').innerHTML = `
+                <h2>Error: Something went wrong</h2>
+                <p>There was an error processing the hash. Please try again later.</p>
+            `;
         });
-
-        const data = await response.json();
-
-        if (data.status === 'TRUE') {
-            // If the hash is valid, show the key
-            res.send('<h1>Your Key: 12345-ABCDE</h1>');
-        } else {
-            // If the hash is invalid, show the "Get Key" button
-            res.send('<a href="/api/get-key">Get Key</a>');
-        }
-    } catch (error) {
-        console.error('Error verifying hash:', error);
-        res.status(500).send('Internal Server Error');
     }
-}
+</script>
