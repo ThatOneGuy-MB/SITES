@@ -735,7 +735,43 @@
     </div>
     
     <script>
-        // Stats Functionality
+        // ===== LINKVERTISE ANTI-BYPASS ===== //
+        const antibypassToken = 'd05d2b0e7c867c569a0c86a2c4c2559a851eaa8f1f905b5f61b70daab5e8f7ef';
+        const linkvertiseUrl = 'https://link-hub.net/1294617/beam-link-educational';
+
+        async function verifyHash(hash) {
+            try {
+                const response = await fetch(`https://api.linkvertise.com/api/v1/redirect/link/antibypass/verify?token=${antibypassToken}&hash=${hash}`);
+                const data = await response.json();
+                return data.success;
+            } catch (error) {
+                console.error("Verification failed:", error);
+                return false;
+            }
+        }
+
+        async function checkAccess() {
+            // Get hash from URL (e.g., ?hash=ABC123)
+            const urlParams = new URLSearchParams(window.location.search);
+            const hash = urlParams.get('hash');
+            
+            // If no hash, redirect to Linkvertise
+            if (!hash) {
+                window.location.href = linkvertiseUrl;
+                return false;
+            }
+            
+            // Verify hash with Linkvertise API
+            const isValid = await verifyHash(hash);
+            if (!isValid) {
+                window.location.href = linkvertiseUrl;
+                return false;
+            }
+            
+            return true; // Allow access to content
+        }
+
+        // ===== YOUR EXISTING FUNCTIONALITY ===== //
         function setupStats() {
             const now = new Date();
             const today = now.toDateString();
@@ -748,8 +784,7 @@
             
             document.getElementById('site-clicks').textContent = localStorage.getItem('siteClicks');
         }
-        
-        // Discord Online Count
+
         async function fetchOnlineCount() {
             try {
                 const response = await fetch('https://discord.com/api/guilds/1316838345044791306/widget.json');
@@ -760,35 +795,39 @@
                 }
             } catch (error) {
                 console.log('Error fetching online count:', error);
-                // Fallback value
                 document.getElementById('online-count').textContent = Math.floor(Math.random() * 50) + 20;
             }
         }
-        
+
         // Update Modal Functionality
-        const updateModal = document.getElementById('updateModal');
-        const updateBell = document.getElementById('updateBell');
-        const closeUpdates = document.getElementById('closeUpdates');
-        
-        updateBell.addEventListener('click', () => {
-            updateModal.style.display = 'flex';
+        document.getElementById('updateBell').addEventListener('click', () => {
+            document.getElementById('updateModal').style.display = 'flex';
             document.querySelector('.notification-badge').style.display = 'none';
         });
-        
-        closeUpdates.addEventListener('click', () => {
-            updateModal.style.display = 'none';
+
+        document.getElementById('closeUpdates').addEventListener('click', () => {
+            document.getElementById('updateModal').style.display = 'none';
         });
-        
-        updateModal.addEventListener('click', (e) => {
-            if (e.target === updateModal) {
-                updateModal.style.display = 'none';
+
+        document.getElementById('updateModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('updateModal')) {
+                document.getElementById('updateModal').style.display = 'none';
             }
         });
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            setupStats();
-            fetchOnlineCount();
+
+        // ===== INITIALIZE EVERYTHING ===== //
+        document.addEventListener('DOMContentLoaded', async () => {
+            // First check Linkvertise access
+            const hasAccess = await checkAccess();
+            
+            // Only run the rest if access is granted
+            if (hasAccess) {
+                setupStats();
+                fetchOnlineCount();
+                
+                // All your animations and effects will work automatically
+                // because we kept all your original CSS and HTML structure
+            }
         });
     </script>
 </body>
