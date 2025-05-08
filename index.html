@@ -791,47 +791,5 @@
             fetchOnlineCount();
         });
     </script>
-    <script>
-  (function() {
-    // Extract hash from URL
-    const params = new URLSearchParams(window.location.search);
-    const hash = params.get('hash');
-
-    if (!hash) {
-      console.log('No hash provided, redirecting to Linkvertise');
-      window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
-      return;
-    }
-
-    console.log('Hash detected:', hash);
-
-    // Send hash to Vercel serverless function for verification
-    fetch('/api/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ hash })
-    })
-      .then(response => {
-        console.log('API response status:', response.status);
-        if (!response.ok) {
-          throw new Error(`HTTP error ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('API response data:', data);
-        if (!data.valid) {
-          console.log('Invalid hash, redirecting to Linkvertise:', data.error);
-          window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
-        } else {
-          console.log('Hash verified successfully');
-        }
-      })
-      .catch(error => {
-        console.error('Verification error:', error.message);
-        window.location.href = 'https://link-hub.net/1294617/beam-link-educational';
-      });
-  })();
-</script>
 </body>
 </html>
