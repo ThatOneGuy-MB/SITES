@@ -798,7 +798,7 @@
 
     if (hash) {
         // If a hash exists, validate it with the serverless API
-        fetch(`/api/validate-hash?token=YOUR_AUTH_TOKEN&hash=${hash}`)
+        fetch(`/api/validate-hash?token=d05d2b0e7c867c569a0c86a2c4c2559a851eaa8f1f905b5f61b70daab5e8f7ef&hash=${hash}`)
             .then(response => response.text())
             .then(data => {
                 // Display the returned data (key or "Get Key")
