@@ -791,41 +791,5 @@
             fetchOnlineCount();
         });
     </script>
-    // ===== LINKVERTISE ANTI-BYPASS API ===== //
-const antibypassToken = 'd05d2b0e7c867c569a0c86a2c4c2559a851eaa8f1f905b5f61b70daab5e8f7ef';
-const linkvertiseUrl = 'https://link-hub.net/1294617/beam-link-educational';
-
-async function verifyHash(hash) {
-  try {
-    const apiUrl = `https://api.linkvertise.com/api/v1/redirect/link/antibypass/verify?token=${antibypassToken}&hash=${hash}`;
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    return data.success; // Returns true/false
-  } catch (error) {
-    console.error("API Error:", error);
-    return false;
-  }
-}
-
-async function checkAccess() {
-  // Get hash from URL (e.g., ?hash=ABC123)
-  const urlParams = new URLSearchParams(window.location.search);
-  const hash = urlParams.get('hash');
-  
-  // If no hash, redirect to Linkvertise
-  if (!hash) {
-    window.location.href = linkvertiseUrl;
-    return false;
-  }
-  
-  // Verify hash via API
-  const isValid = await verifyHash(hash);
-  if (!isValid) {
-    window.location.href = linkvertiseUrl;
-    return false;
-  }
-  
-  return true; // Allow access
-}
 </body>
 </html>
