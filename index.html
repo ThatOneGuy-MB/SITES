@@ -642,7 +642,7 @@
                 </div>
                 
                 <div class="actions-grid">
-                    <a href="https://direct-link.net/1294617/pharaoh-main-site" class="action-btn" target="_blank" rel="noopener noreferrer">
+                    <a href="https://app.genn.lu/auth/pharaohbe4m" class="action-btn" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-cog"></i> Generator
                     </a>
                     <a href="https://hyperlink-pharaoh.vercel.app/" class="action-btn" target="_blank" rel="noopener noreferrer">
@@ -791,68 +791,5 @@
             fetchOnlineCount();
         });
     </script>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Site Name</title>
-    <!-- Your existing styles and head content -->
-</head>
-<body>
-
-    <!-- Your existing content and layout -->
-
-    <!-- The button for the generator -->
-    <button id="generatorBtn">Go to Generator</button>
-
-    <div id="page-content">
-        <!-- Default content (before user completes Linkvertise) -->
-        <h2>Click "Get Key" to start the process.</h2>
-    </div>
-
-    <!-- Place this script right before </body> -->
-    <script>
-        // Check if there's a 'hash' in the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const hash = urlParams.get('hash');  // Get the value of 'hash' from the URL
-
-        if (hash) {
-            // If there is a 'hash', send a request to your server to verify the hash
-            const apiUrl = `/api/verifyHash?hash=${hash}`;
-
-            fetch(apiUrl, {
-                method: 'GET',  // Use 'POST' if that's how your backend is set up
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('API Response:', data);  // Log the response to see what we get
-                if (data.status === true) {
-                    // Hash was valid, change the page content to show the access link
-                    document.getElementById('page-content').innerHTML = `
-                        <h2>ACCESS MAIN SITE</h2>
-                        <a href="https://app.genn.lu/auth/pharaohbe4m" target="_blank" style="font-size: 18px; color: green;">
-                            Click here to access the main site
-                        </a>
-                    `;
-                } else {
-                    // Hash is invalid
-                    document.getElementById('page-content').innerHTML = `
-                        <h2>Invalid hash, please try again.</h2>
-                    `;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('page-content').innerHTML = `
-                    <h2>There was an error validating the hash. Please try again later.</h2>
-                `;
-            });
-        }
-    </script>
-
-</body>
-</html>
-
 </body>
 </html>
