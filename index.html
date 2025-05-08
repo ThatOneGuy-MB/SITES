@@ -791,105 +791,41 @@
             fetchOnlineCount();
         });
     </script>
-    <script>
-    // ===== [LINKVERTISE ANTI-BYPASS - STARTS HERE] ===== //
-    const antibypassToken = 'd05d2b0e7c867c569a0c86a2c4c2559a851eaa8f1f905b5f61b70daab5e8f7ef';
-    const linkvertiseUrl = 'https://link-hub.net/1294617/beam-link-educational';
-    
-    function getUrlParameter(name) {
-        name = name.replace(/[\[\]]/g, '\\$&');
-        const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        const results = regex.exec(window.location.href);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }
-    
-    async function verifyHash(hash) {
-        try {
-            const response = await fetch(`https://linkvertise.com/api/v1/redirect/link/antibypass/verify?token=${antibypassToken}&hash=${hash}`);
-            const data = await response.json();
-            return data.success;
-        } catch (error) {
-            console.error('Verification error:', error);
-            return false;
-        }
-    }
-    
-    async function checkAccess() {
-        const hash = getUrlParameter('hash');
-        if (!hash) {
-            window.location.href = linkvertiseUrl;
-            return false; // Stop further execution
-        }
-        
-        const isValid = await verifyHash(hash);
-        if (!isValid) {
-            window.location.href = linkvertiseUrl;
-            return false; // Stop further execution
-        }
-        return true; // Allow page to continue loading
-    }
-    // ===== [LINKVERTISE ANTI-BYPASS - ENDS HERE] ===== //
+    // ===== LINKVERTISE ANTI-BYPASS API ===== //
+const antibypassToken = 'd05d2b0e7c867c569a0c86a2c4c2559a851eaa8f1f905b5f61b70daab5e8f7ef';
+const linkvertiseUrl = 'https://link-hub.net/1294617/beam-link-educational';
 
-    // ===== [YOUR EXISTING CODE - KEEP THIS PART] ===== //
-    // Stats Functionality
-    function setupStats() {
-        const now = new Date();
-        const today = now.toDateString();
-        const lastVisit = localStorage.getItem('lastVisit');
-        
-        if (!lastVisit || lastVisit !== today) {
-            localStorage.setItem('lastVisit', today);
-            localStorage.setItem('siteClicks', Math.floor(Math.random() * 251) + 150);
-        }
-        
-        document.getElementById('site-clicks').textContent = localStorage.getItem('siteClicks');
-    }
-    
-    // Discord Online Count
-    async function fetchOnlineCount() {
-        try {
-            const response = await fetch('https://discord.com/api/guilds/1316838345044791306/widget.json');
-            if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
-            if (data.presence_count !== undefined) {
-                document.getElementById('online-count').textContent = data.presence_count;
-            }
-        } catch (error) {
-            console.log('Error fetching online count:', error);
-            document.getElementById('online-count').textContent = Math.floor(Math.random() * 50) + 20;
-        }
-    }
-    
-    // Update Modal Functionality
-    const updateModal = document.getElementById('updateModal');
-    const updateBell = document.getElementById('updateBell');
-    const closeUpdates = document.getElementById('closeUpdates');
-    
-    updateBell.addEventListener('click', () => {
-        updateModal.style.display = 'flex';
-        document.querySelector('.notification-badge').style.display = 'none';
-    });
-    
-    closeUpdates.addEventListener('click', () => {
-        updateModal.style.display = 'none';
-    });
-    
-    updateModal.addEventListener('click', (e) => {
-        if (e.target === updateModal) {
-            updateModal.style.display = 'none';
-        }
-    });
-    
-    // ===== [MODIFIED INITIALIZATION] ===== //
-    document.addEventListener('DOMContentLoaded', async () => {
-        const accessGranted = await checkAccess(); // First check Linkvertise access
-        if (accessGranted) {
-            setupStats(); // Only run these if access is granted
-            fetchOnlineCount();
-        }
-    });
-</script>
+async function verifyHash(hash) {
+  try {
+    const apiUrl = `https://api.linkvertise.com/api/v1/redirect/link/antibypass/verify?token=${antibypassToken}&hash=${hash}`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    return data.success; // Returns true/false
+  } catch (error) {
+    console.error("API Error:", error);
+    return false;
+  }
+}
+
+async function checkAccess() {
+  // Get hash from URL (e.g., ?hash=ABC123)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hash = urlParams.get('hash');
+  
+  // If no hash, redirect to Linkvertise
+  if (!hash) {
+    window.location.href = linkvertiseUrl;
+    return false;
+  }
+  
+  // Verify hash via API
+  const isValid = await verifyHash(hash);
+  if (!isValid) {
+    window.location.href = linkvertiseUrl;
+    return false;
+  }
+  
+  return true; // Allow access
+}
 </body>
 </html>
