@@ -5,7 +5,7 @@ export default function handler(req, res) {
     const userHash = generateHash();  // Generate a unique hash
 
     // Redirect user to Linkvertise
-    res.redirect(`https://linkvertise.com/your-target-link?hash=${userHash}`);
+    res.redirect(`https://direct-link.net/1294617/pharaoh-main-site?hash=${userHash}`);
 }
 
 function generateHash() {
