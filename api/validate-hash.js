@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     }
 
     // Your Linkvertise API endpoint
-    const url = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${token}&hash=${hash}`;
+    const url = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${d05d2b0e7c867c569a0c86a2c4c2559a851eaa8f1f905b5f61b70daab5e8f7ef}&hash=${hash}`;
 
     try {
         // Send POST request to Linkvertise API
