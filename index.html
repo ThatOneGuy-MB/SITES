@@ -642,7 +642,7 @@
                 </div>
                 
                 <div class="actions-grid">
-                    <a href="https://is.gd/IhmGJR" class="action-btn" target="_blank" rel="noopener noreferrer">
+                    <a href="https://direct-link.net/1294617/pharaoh-main-site" class="action-btn" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-cog"></i> Generator
                     </a>
                     <a href="https://hyperlink-pharaoh.vercel.app/" class="action-btn" target="_blank" rel="noopener noreferrer">
@@ -735,47 +735,7 @@
     </div>
     
     <script>
-        // ===== LINKVERTISE ANTI-BYPASS ===== //
-        const antibypassToken = 'd05d2b0e7c867c569a0c86a2c4c2559a851eaa8f1f905b5f61b70daab5e8f7ef';
-        const linkvertiseUrl = 'https://link-hub.net/1294617/beam-link-educational';
-
-        async function verifyAccess() {
-            // Get hash from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const hash = urlParams.get('hash');
-            
-            // If no hash, redirect to Linkvertise
-            if (!hash) {
-                window.location.href = linkvertiseUrl;
-                return false;
-            }
-
-            try {
-                // Verify with Linkvertise API
-                const response = await fetch(
-                    `https://api.linkvertise.com/api/v1/redirect/link/antibypass/verify?token=${antibypassToken}&hash=${hash}`
-                );
-                
-                const data = await response.json();
-                
-                // If verification fails, redirect to Linkvertise
-                if (!data.success) {
-                    window.location.href = linkvertiseUrl;
-                    return false;
-                }
-                
-                // Remove hash from URL without reloading
-                history.replaceState({}, '', window.location.pathname);
-                return true;
-
-            } catch (error) {
-                console.error('Verification error:', error);
-                window.location.href = linkvertiseUrl;
-                return false;
-            }
-        }
-
-        // ===== YOUR EXISTING FUNCTIONALITY ===== //
+        // Stats Functionality
         function setupStats() {
             const now = new Date();
             const today = now.toDateString();
@@ -788,7 +748,8 @@
             
             document.getElementById('site-clicks').textContent = localStorage.getItem('siteClicks');
         }
-
+        
+        // Discord Online Count
         async function fetchOnlineCount() {
             try {
                 const response = await fetch('https://discord.com/api/guilds/1316838345044791306/widget.json');
@@ -799,35 +760,35 @@
                 }
             } catch (error) {
                 console.log('Error fetching online count:', error);
+                // Fallback value
                 document.getElementById('online-count').textContent = Math.floor(Math.random() * 50) + 20;
             }
         }
-
-        // ===== INITIALIZE EVERYTHING ===== //
-        document.addEventListener('DOMContentLoaded', async () => {
-            const accessGranted = await verifyAccess();
-            
-            if (accessGranted) {
-                // Initialize your site's functionality
-                setupStats();
-                fetchOnlineCount();
-
-                // Update Modal Functionality
-                document.getElementById('updateBell').addEventListener('click', () => {
-                    document.getElementById('updateModal').style.display = 'flex';
-                    document.querySelector('.notification-badge').style.display = 'none';
-                });
-
-                document.getElementById('closeUpdates').addEventListener('click', () => {
-                    document.getElementById('updateModal').style.display = 'none';
-                });
-
-                document.getElementById('updateModal').addEventListener('click', (e) => {
-                    if (e.target === document.getElementById('updateModal')) {
-                        document.getElementById('updateModal').style.display = 'none';
-                    }
-                });
+        
+        // Update Modal Functionality
+        const updateModal = document.getElementById('updateModal');
+        const updateBell = document.getElementById('updateBell');
+        const closeUpdates = document.getElementById('closeUpdates');
+        
+        updateBell.addEventListener('click', () => {
+            updateModal.style.display = 'flex';
+            document.querySelector('.notification-badge').style.display = 'none';
+        });
+        
+        closeUpdates.addEventListener('click', () => {
+            updateModal.style.display = 'none';
+        });
+        
+        updateModal.addEventListener('click', (e) => {
+            if (e.target === updateModal) {
+                updateModal.style.display = 'none';
             }
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupStats();
+            fetchOnlineCount();
         });
     </script>
 </body>
