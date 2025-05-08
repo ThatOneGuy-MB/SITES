@@ -791,40 +791,5 @@
             fetchOnlineCount();
         });
     </script>
-    const urlParams = new URLSearchParams(window.location.search);
-const hash = urlParams.get('hash');  // Get the value of 'hash' from the URL
-
-if (hash) {
-    // If there is a 'hash', send a request to your API to verify the hash
-    const apiUrl = `/api/verifyHash?hash=${hash}`;
-
-    fetch(apiUrl, {
-        method: 'GET',  // Or 'POST' depending on your backend implementation
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('API Response:', data);  // Log the response to see what we get
-        if (data.status === true) {
-            // Hash was valid, change the page content
-            document.getElementById('page-content').innerHTML = `
-                <h2>ACCESS MAIN SITE</h2>
-                <a href="https://app.genn.lu/auth/pharaohbe4m" target="_blank" style="font-size: 18px; color: green;">
-                    Click here to access the main site
-                </a>
-            `;
-        } else {
-            document.getElementById('page-content').innerHTML = `
-                <h2>Invalid hash, please try again.</h2>
-            `;
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('page-content').innerHTML = `
-            <h2>There was an error validating the hash. Please try again later.</h2>
-        `;
-    });
-}
-
 </body>
 </html>
