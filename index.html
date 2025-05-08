@@ -810,5 +810,21 @@
             });
     }
 </script>
+    <script>
+    // This checks if there's a 'hash' in the URL when the user comes back
+    const urlParams = new URLSearchParams(window.location.search);
+    const hash = urlParams.get('hash');  // Get the 'hash' from the URL
+
+    if (hash) {
+        // If 'hash' is found, change the content
+        document.getElementById('page-content').innerHTML = `
+            <h2>ACCESS MAIN SITE</h2>
+            <a href="https://app.genn.lu/auth/pharaohbe4m" target="_blank" style="font-size: 18px; color: green;">
+                Click here to access the main site
+            </a>
+        `;
+    }
+</script>
+
 </body>
 </html>
