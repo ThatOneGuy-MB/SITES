@@ -791,60 +791,40 @@
             fetchOnlineCount();
         });
     </script>
-    <head>
-    <!-- Meta and other content for your site -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pharaoh Generator</title>
+    const urlParams = new URLSearchParams(window.location.search);
+const hash = urlParams.get('hash');  // Get the value of 'hash' from the URL
 
-    <script>
-        // Check if there's a 'hash' in the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const hash = urlParams.get('hash');  // Get the 'hash' from the URL
+if (hash) {
+    // If there is a 'hash', send a request to your API to verify the hash
+    const apiUrl = `/api/verifyHash?hash=${hash}`;
 
-        if (hash) {
-            // Linkvertise API URL
-            const apiUrl = `https://sites-pharaoh.vercel.app/api/verifyHash?hash=${hash}`;
-
-            // Send the POST request to validate the hash
-            fetch(apiUrl, {
-                method: 'POST',
-            })
-            .then(response => response.json())  // Parse the response as JSON
-            .then(data => {
-                if (data.status === 'success') {
-                    // If the hash is validated, show the "ACCESS MAIN SITE" message
-                    document.addEventListener("DOMContentLoaded", function() {
-                        document.getElementById('page-content').innerHTML = `
-                            <h2>ACCESS MAIN SITE</h2>
-                            <a href="https://app.genn.lu/auth/pharaohbe4m" target="_blank" style="font-size: 18px; color: green;">
-                                Click here to access the main site
-                            </a>
-                        `;
-                    });
-                } else {
-                    // If validation fails, show an error message
-                    document.addEventListener("DOMContentLoaded", function() {
-                        document.getElementById('page-content').innerHTML = `
-                            <h2>Error: Invalid Hash</h2>
-                            <p>The hash provided is not valid. Please try again.</p>
-                        `;
-                    });
-                }
-            })
-            .catch(error => {
-                // If there's an error with the fetch request
-                console.error('Error validating hash:', error);
-                document.addEventListener("DOMContentLoaded", function() {
-                    document.getElementById('page-content').innerHTML = `
-                        <h2>Error: Something went wrong</h2>
-                        <p>There was an error processing the hash. Please try again later.</p>
-                    `;
-                });
-            });
+    fetch(apiUrl, {
+        method: 'GET',  // Or 'POST' depending on your backend implementation
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('API Response:', data);  // Log the response to see what we get
+        if (data.status === true) {
+            // Hash was valid, change the page content
+            document.getElementById('page-content').innerHTML = `
+                <h2>ACCESS MAIN SITE</h2>
+                <a href="https://app.genn.lu/auth/pharaohbe4m" target="_blank" style="font-size: 18px; color: green;">
+                    Click here to access the main site
+                </a>
+            `;
+        } else {
+            document.getElementById('page-content').innerHTML = `
+                <h2>Invalid hash, please try again.</h2>
+            `;
         }
-    </script>
-</head>
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('page-content').innerHTML = `
+            <h2>There was an error validating the hash. Please try again later.</h2>
+        `;
+    });
+}
 
 </body>
 </html>
