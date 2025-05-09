@@ -791,5 +791,23 @@
             fetchOnlineCount();
         });
     </script>
+    <script>
+  // Extract hash from URL (e.g., ?hash=abc123)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hash = urlParams.get('hash');
+
+  if (!hash) {
+    // If no hash, force them to go through Linkvertise
+    window.location.href = "https://link-hub.net/1294617/beam-link-educational"; // 🔗 Replace with your Linkvertise link
+  } else {
+    // Verify the hash with your backend
+    fetch(`/api/verify?hash=${hash}`)
+      .then(response => {
+        if (!response.ok) {
+          window.location.href = "https://link-hub.net/1294617/beam-link-educational"; // ❌ Invalid hash
+        }
+      });
+  }
+</script>
 </body>
 </html>
