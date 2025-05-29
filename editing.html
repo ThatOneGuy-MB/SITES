@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* PASTE THE ENTIRE <style> SECTION FROM YOUR index.html HERE */
         :root {
             --black: #0a0a0a;
             --dark-black: #000000;
@@ -517,6 +516,7 @@
             color: var(--bright-red);
             margin-bottom: 1rem;
             font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
         }
         
         .tutorial-section ul {
@@ -529,7 +529,7 @@
         }
         
         .tutorial-section li::before {
-            content: '➤';
+            content: '•';
             color: var(--bright-red);
             position: absolute;
             left: -1.5rem;
@@ -573,6 +573,15 @@
             margin-top: 0.5rem;
         }
         
+        .upload-instructions a {
+            color: var(--bright-red);
+            text-decoration: none;
+        }
+        
+        .upload-instructions a:hover {
+            text-decoration: underline;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .logo {
@@ -609,6 +618,10 @@
             .tools-buttons {
                 flex-direction: column;
                 align-items: center;
+            }
+            
+            .tutorial-section h3 {
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -691,7 +704,7 @@
                 
                 <div class="form-group">
                     <label for="discordUsername">Discord Username:</label>
-                    <input type="text" id="discordUsername" required>
+                    <input type="text" id="discordUsername" placeholder="username#0000" required>
                 </div>
                 
                 <div class="form-group">
@@ -722,7 +735,7 @@
             <button class="close-tutorial" id="closeTutorial">&times;</button>
             
             <div class="tutorial-section">
-                <h3>Requirements:</h3>
+                <h3>1. Requirements:</h3>
                 <ul>
                     <li>Laptop Or Pc</li>
                     <li>Recording Software (To Record Your Screen)</li>
@@ -733,7 +746,7 @@
             </div>
             
             <div class="tutorial-section">
-                <h3>Recording The Video:</h3>
+                <h3>2. Recording The Video:</h3>
                 <ul>
                     <li>Open your streaming software (like OBS or Streamlabs)</li>
                     <li>Add what you want to record (screen, webcam, mic, etc.)</li>
@@ -744,7 +757,7 @@
             </div>
             
             <div class="tutorial-section">
-                <h3>Import into Your Editing Software:</h3>
+                <h3>3. Import into Your Editing Software:</h3>
                 <ul>
                     <li>Open your preferred video editing software</li>
                     <li>Create a new project with 1080p resolution at 60fps</li>
@@ -754,7 +767,7 @@
             </div>
             
             <div class="tutorial-section">
-                <h3>Apply Basic Edits:</h3>
+                <h3>4. Apply Basic Edits:</h3>
                 <ul>
                     <li>Trim unnecessary parts from the beginning and end</li>
                     <li>Cut out any mistakes or unwanted sections</li>
@@ -764,7 +777,7 @@
             </div>
             
             <div class="tutorial-section">
-                <h3>Add Transitions and Effects:</h3>
+                <h3>5. Add Transitions and Effects:</h3>
                 <ul>
                     <li>Apply smooth transitions between clips (dissolves, wipes, etc.)</li>
                     <li>Add motion effects like zoom, pan, or rotation where appropriate</li>
@@ -774,7 +787,7 @@
             </div>
             
             <div class="tutorial-section">
-                <h3>Incorporate Audio Elements:</h3>
+                <h3>6. Incorporate Audio Elements:</h3>
                 <ul>
                     <li>Add background music that matches the mood of the video</li>
                     <li>Adjust audio levels to ensure music doesn't overpower other sounds</li>
@@ -784,7 +797,7 @@
             </div>
             
             <div class="tutorial-section">
-                <h3>Add Text and Graphics:</h3>
+                <h3>7. Add Text and Graphics:</h3>
                 <ul>
                     <li>Create title screens with engaging typography</li>
                     <li>Add lower thirds or captions where needed</li>
@@ -794,7 +807,7 @@
             </div>
             
             <div class="tutorial-section">
-                <h3>Export Final Video:</h3>
+                <h3>8. Export Final Video:</h3>
                 <ul>
                     <li>Choose MP4 format with H.264 codec for best compatibility</li>
                     <li>Set resolution to 1080p or higher</li>
@@ -804,7 +817,7 @@
             </div>
             
             <div class="tutorial-section">
-                <h3>Submit Your Edited Video:</h3>
+                <h3>9. Submit Your Edited Video:</h3>
                 <ul>
                     <li>Return to the editing page on our website</li>
                     <li>Fill out all required fields in the submission form</li>
@@ -814,7 +827,7 @@
             </div>
             
             <div class="tutorial-section">
-                <h3>Warnings:</h3>
+                <h3>10. Warnings:</h3>
                 <ul>
                     <li>Don't use copyrighted music without proper licensing</li>
                     <li>Avoid over-editing that might distract from the content</li>
@@ -860,6 +873,8 @@
                 videoLinkAdded = true;
                 addLinkBtn.innerHTML = '<i class="fas fa-check"></i> Link Added';
                 addLinkBtn.style.backgroundColor = 'var(--bright-red)';
+            } else {
+                alert('Please enter a valid video link first!');
             }
         });
         
@@ -881,39 +896,21 @@
                 return;
             }
             
-            // Send to Discord webhook
+            // Send to Discord webhook with @everyone ping
             const webhookUrl = 'https://discord.com/api/webhooks/1377754136262742118/biG-2kVS2vcjkM9TQGAgPHcRgVpYsPOabFdaff2E4Q9BbR53hIxdK_vHL7ewgXO6dj6s';
             
             const embed = {
-                title: 'New Video Submission',
+                title: '🚨 NEW VIDEO SUBMISSION - @everyone @here 🚨',
+                description: `**User:** ${userName}\n**Discord:** ${discordUsername}\n**Roblox:** ${robloxUsername}\n\n[View Video](${videoLink})`,
                 color: 0xff0000,
                 fields: [
                     {
-                        name: 'User Name',
-                        value: userName,
-                        inline: true
-                    },
-                    {
-                        name: 'Discord Username',
-                        value: discordUsername,
-                        inline: true
-                    },
-                    {
-                        name: 'Roblox Username',
-                        value: robloxUsername,
-                        inline: true
-                    },
-                    {
-                        name: 'Video Link',
-                        value: videoLink
-                    },
-                    {
                         name: 'Edits Description',
-                        value: editsDescription
+                        value: editsDescription.length > 1000 ? editsDescription.substring(0, 1000) + '...' : editsDescription
                     },
                     {
                         name: 'Effects Description',
-                        value: effectsDescription
+                        value: effectsDescription.length > 1000 ? effectsDescription.substring(0, 1000) + '...' : effectsDescription
                     }
                 ],
                 timestamp: new Date().toISOString()
@@ -925,12 +922,13 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    content: "@everyone @here NEW VIDEO SUBMISSION!",
                     embeds: [embed]
                 })
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Your submission has been received! We will review your video and contact you soon.');
+                    alert('✅ Your submission has been received! We will review your video and contact you soon.');
                     // Reset form
                     document.getElementById('videoLink').value = '';
                     document.getElementById('userName').value = '';
@@ -942,12 +940,12 @@
                     addLinkBtn.style.backgroundColor = 'var(--dark-red)';
                     videoLinkAdded = false;
                 } else {
-                    alert('There was an error submitting your video. Please try again later.');
+                    alert('⚠️ There was an error submitting your video. Please try again later.');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('There was an error submitting your video. Please try again later.');
+                alert('⚠️ There was an error submitting your video. Please try again later.');
             });
         });
     </script>
