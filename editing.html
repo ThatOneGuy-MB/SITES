@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHARAOH - EDITING</title>
+    <title>PHARAOH - EASY PAYMENTS</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -97,9 +97,10 @@
         
         header {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 2rem;
+            gap: 1rem;
             padding: 3rem 0;
             flex-wrap: wrap;
             border-bottom: 1px solid var(--bright-red);
@@ -114,6 +115,14 @@
             text-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--bright-red);
             position: relative;
             letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-align: center;
+            margin-bottom: 1rem;
         }
         
         .logo::after {
@@ -412,60 +421,49 @@
             letter-spacing: 1px;
         }
         
-        /* Enhanced Update Bell */
-        .update-bell {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            background: rgba(255, 0, 0, 0.8);
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
+        /* Video Container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(139, 0, 0, 0.3);
+            border: 1px solid var(--bright-red);
+        }
+        
+        .video-container video {
+            width: 100%;
+            display: block;
+        }
+        
+        /* Payment Details */
+        .payment-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .payment-row {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 100;
-            transition: all 0.3s ease;
-            border: 2px solid var(--bright-red);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), 0 0 40px rgba(255, 0, 0, 0.3);
-            animation: pulse 1.5s infinite;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(139, 0, 0, 0.5);
         }
         
-        .update-bell:hover {
-            transform: scale(1.15) rotate(15deg);
-            background: rgba(255, 0, 0, 0.9);
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.8), 0 0 60px rgba(255, 0, 0, 0.4);
-            animation: none;
+        .payment-label {
+            font-weight: 600;
+            color: var(--bright-red);
         }
         
-        .update-bell i {
-            color: var(--white);
-            font-size: 2rem;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        .payment-value {
+            text-align: right;
         }
         
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: var(--white);
-            color: var(--dark-red);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            font-weight: bold;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            border: 2px solid var(--bright-red);
-            animation: pulse 1s infinite alternate;
-        }
-        
-        /* Update Modal */
-        .update-modal {
+        /* Tutorial Modal */
+        .tutorial-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -477,14 +475,16 @@
             justify-content: center;
             z-index: 1000;
             animation: fadeIn 0.3s ease-out;
+            overflow-y: auto;
+            padding: 2rem;
         }
         
-        .update-content {
+        .tutorial-content {
             background: rgba(0, 0, 0, 0.95);
             border-radius: 1rem;
             padding: 2.5rem;
             width: 90%;
-            max-width: 600px;
+            max-width: 800px;
             max-height: 80vh;
             overflow-y: auto;
             border: 1px solid var(--bright-red);
@@ -492,24 +492,10 @@
             position: relative;
         }
         
-        .update-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--bright-red);
-            padding-bottom: 1rem;
-        }
-        
-        .update-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--white);
-            text-shadow: 0 0 10px var(--bright-red);
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        .close-updates {
+        .close-tutorial {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
             background: none;
             border: none;
             color: var(--gray);
@@ -518,50 +504,83 @@
             transition: all 0.2s ease;
         }
         
-        .close-updates:hover {
+        .close-tutorial:hover {
             color: var(--bright-red);
             transform: rotate(90deg);
         }
         
-        .update-item {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(139, 0, 0, 0.5);
+        .tutorial-section {
+            margin-bottom: 2rem;
         }
         
-        .update-date {
+        .tutorial-section h3 {
             color: var(--bright-red);
-            font-size: 1.1rem;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
+            margin-bottom: 1rem;
             font-family: 'Orbitron', sans-serif;
         }
         
-        .update-text {
-            color: var(--white);
-            line-height: 1.7;
-        }
-        
-        .update-text ul {
+        .tutorial-section ul {
             padding-left: 2rem;
         }
         
-        .update-text li {
-            margin-bottom: 0.7rem;
+        .tutorial-section li {
+            margin-bottom: 0.5rem;
             position: relative;
         }
         
-        .update-text li::before {
+        .tutorial-section li::before {
             content: '➤';
             color: var(--bright-red);
             position: absolute;
             left: -1.5rem;
         }
         
+        /* Submission Form */
+        .submission-form {
+            margin-top: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--bright-red);
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--bright-red);
+            border-radius: 0.5rem;
+            color: var(--white);
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .upload-instructions {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .logo {
                 font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
             }
             
             header {
@@ -574,7 +593,11 @@
                 grid-template-columns: 1fr;
             }
             
-            .update-content {
+            .payment-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .tutorial-content {
                 width: 95%;
                 padding: 1.5rem;
             }
@@ -587,23 +610,6 @@
                 flex-direction: column;
                 align-items: center;
             }
-            
-            .update-bell {
-                width: 55px;
-                height: 55px;
-                top: 15px;
-                right: 15px;
-            }
-            
-            .update-bell i {
-                font-size: 1.5rem;
-            }
-            
-            .notification-badge {
-                width: 25px;
-                height: 25px;
-                font-size: 0.8rem;
-            }
         }
     </style>
 </head>
@@ -613,7 +619,8 @@
     
     <div class="container">
         <header>
-            <h1 class="logo glitch">EDITING MODE</h1>
+            <h1 class="logo glitch">PHARAOH EASY PAYMENTS</h1>
+            <p class="subtitle">Make Simple Tutorial Videos And Gain Insane Robux Rewards</p>
             <a href="/" class="btn">
                 <i class="fas fa-home"></i> Back to Main
             </a>
@@ -622,39 +629,326 @@
         <main>
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">EDITING TOOLS</h2>
+                    <h2 class="card-title">EXAMPLE VIDEO</h2>
                 </div>
                 
-                <div class="features-grid">
-                    <div class="feature">
-                        <i class="fas fa-sliders-h"></i>
-                        <span>Advanced Settings</span>
+                <div class="video-container">
+                    <video controls poster="https://via.placeholder.com/800x450?text=Click+to+Play">
+                        <source src="https://f.uguu.se/YUdRZObE.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">PAYMENT DETAILS</h2>
+                </div>
+                
+                <div class="payment-details">
+                    <div class="payment-row">
+                        <span class="payment-label">Payment Amount:</span>
+                        <span class="payment-value">4000-12000 Robux</span>
                     </div>
-                    <div class="feature">
-                        <i class="fas fa-code"></i>
-                        <span>Code Editor</span>
+                    <div class="payment-row">
+                        <span class="payment-label">Payment Method:</span>
+                        <span class="payment-value">Roblox Gamepass, Pls Donate</span>
                     </div>
                 </div>
                 
-                <div class="actions-grid">
-                    <a href="#" class="action-btn">
-                        <i class="fas fa-palette"></i> Theme Editor
-                    </a>
-                    <a href="#" class="action-btn">
-                        <i class="fas fa-key"></i> Admin Tools
-                    </a>
-                    <a href="#" class="action-btn">
-                        <i class="fas fa-database"></i> Data Manager
-                    </a>
+                <div class="text-center">
+                    <button id="viewTutorialBtn" class="btn">
+                        <i class="fas fa-book"></i> View Step By Step Tutorial
+                    </button>
                 </div>
+            </div>
+            
+            <div class="card submission-form">
+                <div class="card-header">
+                    <h2 class="card-title">SUBMIT YOUR VIDEO</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label for="videoLink">Submit Your Video Link:</label>
+                    <input type="text" id="videoLink" placeholder="Paste your video link here">
+                    <button id="addLinkBtn" class="btn" style="margin-top: 1rem;">
+                        <i class="fas fa-link"></i> Add Link
+                    </button>
+                    <p class="upload-instructions">
+                        How to upload your video:<br>
+                        1. Go to <a href="https://pomf.lain.la" target="_blank">https://pomf.lain.la</a> or 
+                        <a href="https://catbox.moe" target="_blank">https://catbox.moe</a> or 
+                        <a href="https://uguu.se" target="_blank">https://uguu.se</a><br>
+                        2. When uploaded, copy the link<br>
+                        3. Paste the link in the field above
+                    </p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userName">Your Name:</label>
+                    <input type="text" id="userName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="discordUsername">Discord Username:</label>
+                    <input type="text" id="discordUsername" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="robloxUsername">Roblox Username (for payment):</label>
+                    <input type="text" id="robloxUsername" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editsDescription">Describe the edits you made to the video:</label>
+                    <textarea id="editsDescription" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="effectsDescription">Describe the effects, transitions, and other edits you applied:</label>
+                    <textarea id="effectsDescription" required></textarea>
+                </div>
+                
+                <button id="submitVideoBtn" class="btn" style="width: 100%;">
+                    <i class="fas fa-paper-plane"></i> Submit Your Edited Video
+                </button>
             </div>
         </main>
     </div>
     
+    <!-- Tutorial Modal -->
+    <div class="tutorial-modal" id="tutorialModal">
+        <div class="tutorial-content">
+            <button class="close-tutorial" id="closeTutorial">&times;</button>
+            
+            <div class="tutorial-section">
+                <h3>Requirements:</h3>
+                <ul>
+                    <li>Laptop Or Pc</li>
+                    <li>Recording Software (To Record Your Screen)</li>
+                    <li>Editing Software (To Edit The Video For TTS etc etc)</li>
+                    <li>Discord Account To Showcase How To Do it</li>
+                    <li>Roblox account to receive payment</li>
+                </ul>
+            </div>
+            
+            <div class="tutorial-section">
+                <h3>Recording The Video:</h3>
+                <ul>
+                    <li>Open your streaming software (like OBS or Streamlabs)</li>
+                    <li>Add what you want to record (screen, webcam, mic, etc.)</li>
+                    <li>Choose where to save the video in settings</li>
+                    <li>Set the video quality and sound options</li>
+                    <li>Click "Start Recording." When done, click "Stop Recording"</li>
+                </ul>
+            </div>
+            
+            <div class="tutorial-section">
+                <h3>Import into Your Editing Software:</h3>
+                <ul>
+                    <li>Open your preferred video editing software</li>
+                    <li>Create a new project with 1080p resolution at 60fps</li>
+                    <li>Import the downloaded video into your project</li>
+                    <li>Organize your project files and create necessary sequences</li>
+                </ul>
+            </div>
+            
+            <div class="tutorial-section">
+                <h3>Apply Basic Edits:</h3>
+                <ul>
+                    <li>Trim unnecessary parts from the beginning and end</li>
+                    <li>Cut out any mistakes or unwanted sections</li>
+                    <li>Arrange clips in a logical and engaging sequence</li>
+                    <li>Adjust the pacing to maintain viewer interest</li>
+                </ul>
+            </div>
+            
+            <div class="tutorial-section">
+                <h3>Add Transitions and Effects:</h3>
+                <ul>
+                    <li>Apply smooth transitions between clips (dissolves, wipes, etc.)</li>
+                    <li>Add motion effects like zoom, pan, or rotation where appropriate</li>
+                    <li>Apply color grading to enhance the visual appeal</li>
+                    <li>Use filters to create a consistent look throughout the video</li>
+                </ul>
+            </div>
+            
+            <div class="tutorial-section">
+                <h3>Incorporate Audio Elements:</h3>
+                <ul>
+                    <li>Add background music that matches the mood of the video</li>
+                    <li>Adjust audio levels to ensure music doesn't overpower other sounds</li>
+                    <li>Add sound effects to enhance specific moments</li>
+                    <li>Normalize audio to maintain consistent volume levels</li>
+                </ul>
+            </div>
+            
+            <div class="tutorial-section">
+                <h3>Add Text and Graphics:</h3>
+                <ul>
+                    <li>Create title screens with engaging typography</li>
+                    <li>Add lower thirds or captions where needed</li>
+                    <li>Include animated text elements for emphasis</li>
+                    <li>Insert graphical elements that enhance the content</li>
+                </ul>
+            </div>
+            
+            <div class="tutorial-section">
+                <h3>Export Final Video:</h3>
+                <ul>
+                    <li>Choose MP4 format with H.264 codec for best compatibility</li>
+                    <li>Set resolution to 1080p or higher</li>
+                    <li>Use a high bitrate (8-12 Mbps) for quality output</li>
+                    <li>Ensure audio is exported at 48kHz, 320kbps</li>
+                </ul>
+            </div>
+            
+            <div class="tutorial-section">
+                <h3>Submit Your Edited Video:</h3>
+                <ul>
+                    <li>Return to the editing page on our website</li>
+                    <li>Fill out all required fields in the submission form</li>
+                    <li>Upload your final edited video or provide a link with the supported links in the editing page</li>
+                    <li>Submit your work and wait for review and payment</li>
+                </ul>
+            </div>
+            
+            <div class="tutorial-section">
+                <h3>Warnings:</h3>
+                <ul>
+                    <li>Don't use copyrighted music without proper licensing</li>
+                    <li>Avoid over-editing that might distract from the content</li>
+                    <li>Don't compress the video too much as it reduces quality</li>
+                    <li>Make sure to meet all requirements to ensure payment</li>
+                    <li>Don't share the original video with others</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        // You can add custom JavaScript for the editing page here
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('Editing page loaded');
+        // Tutorial Modal
+        const tutorialModal = document.getElementById('tutorialModal');
+        const viewTutorialBtn = document.getElementById('viewTutorialBtn');
+        const closeTutorial = document.getElementById('closeTutorial');
+        
+        viewTutorialBtn.addEventListener('click', () => {
+            tutorialModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeTutorial.addEventListener('click', () => {
+            tutorialModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        tutorialModal.addEventListener('click', (e) => {
+            if (e.target === tutorialModal) {
+                tutorialModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Form Submission
+        const submitVideoBtn = document.getElementById('submitVideoBtn');
+        const addLinkBtn = document.getElementById('addLinkBtn');
+        let videoLinkAdded = false;
+        
+        addLinkBtn.addEventListener('click', () => {
+            const videoLink = document.getElementById('videoLink').value.trim();
+            if (videoLink) {
+                videoLinkAdded = true;
+                addLinkBtn.innerHTML = '<i class="fas fa-check"></i> Link Added';
+                addLinkBtn.style.backgroundColor = 'var(--bright-red)';
+            }
+        });
+        
+        submitVideoBtn.addEventListener('click', () => {
+            const userName = document.getElementById('userName').value.trim();
+            const discordUsername = document.getElementById('discordUsername').value.trim();
+            const robloxUsername = document.getElementById('robloxUsername').value.trim();
+            const editsDescription = document.getElementById('editsDescription').value.trim();
+            const effectsDescription = document.getElementById('effectsDescription').value.trim();
+            const videoLink = document.getElementById('videoLink').value.trim();
+            
+            if (!videoLinkAdded) {
+                alert('Please add your video link first!');
+                return;
+            }
+            
+            if (!userName || !discordUsername || !robloxUsername || !editsDescription || !effectsDescription) {
+                alert('Please fill in all required fields!');
+                return;
+            }
+            
+            // Send to Discord webhook
+            const webhookUrl = 'https://discord.com/api/webhooks/1377754136262742118/biG-2kVS2vcjkM9TQGAgPHcRgVpYsPOabFdaff2E4Q9BbR53hIxdK_vHL7ewgXO6dj6s';
+            
+            const embed = {
+                title: 'New Video Submission',
+                color: 0xff0000,
+                fields: [
+                    {
+                        name: 'User Name',
+                        value: userName,
+                        inline: true
+                    },
+                    {
+                        name: 'Discord Username',
+                        value: discordUsername,
+                        inline: true
+                    },
+                    {
+                        name: 'Roblox Username',
+                        value: robloxUsername,
+                        inline: true
+                    },
+                    {
+                        name: 'Video Link',
+                        value: videoLink
+                    },
+                    {
+                        name: 'Edits Description',
+                        value: editsDescription
+                    },
+                    {
+                        name: 'Effects Description',
+                        value: effectsDescription
+                    }
+                ],
+                timestamp: new Date().toISOString()
+            };
+            
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    embeds: [embed]
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Your submission has been received! We will review your video and contact you soon.');
+                    // Reset form
+                    document.getElementById('videoLink').value = '';
+                    document.getElementById('userName').value = '';
+                    document.getElementById('discordUsername').value = '';
+                    document.getElementById('robloxUsername').value = '';
+                    document.getElementById('editsDescription').value = '';
+                    document.getElementById('effectsDescription').value = '';
+                    addLinkBtn.innerHTML = '<i class="fas fa-link"></i> Add Link';
+                    addLinkBtn.style.backgroundColor = 'var(--dark-red)';
+                    videoLinkAdded = false;
+                } else {
+                    alert('There was an error submitting your video. Please try again later.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your video. Please try again later.');
+            });
         });
     </script>
 </body>
