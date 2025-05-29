@@ -411,7 +411,7 @@
             letter-spacing: 1px;
         }
         
-        /* Updated Suit Man Icon */
+        /* Update Bell Icon */
         .update-bell {
             position: fixed;
             top: 25px;
@@ -460,6 +460,44 @@
             font-weight: bold;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             border: 2px solid var(--bright-red);
+        }
+        
+        /* New Suit Man Button */
+        .suit-man-btn {
+            position: fixed;
+            top: 25px;
+            right: 100px;
+            background: rgba(0, 0, 139, 0.8);
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            border: 2px solid #0000FF;
+            box-shadow: 0 0 20px rgba(0, 0, 255, 0.6), 0 0 40px rgba(0, 0, 255, 0.3);
+            animation: pulse-blue 1.5s infinite;
+        }
+        
+        .suit-man-btn:hover {
+            transform: scale(1.15);
+            background: rgba(0, 0, 139, 0.9);
+            box-shadow: 0 0 30px rgba(0, 0, 255, 0.8), 0 0 60px rgba(0, 0, 255, 0.4);
+            animation: none;
+        }
+        
+        .suit-man-btn i {
+            color: var(--white);
+            font-size: 2rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes pulse-blue {
+            from { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 0, 255, 0.7); }
+            to { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(0, 0, 255, 0); }
         }
         
         /* Update Modal */
@@ -586,14 +624,21 @@
                 align-items: center;
             }
             
-            .update-bell {
+            .update-bell, .suit-man-btn {
                 width: 55px;
                 height: 55px;
                 top: 15px;
+            }
+            
+            .update-bell {
                 right: 15px;
             }
             
-            .update-bell i {
+            .suit-man-btn {
+                right: 80px;
+            }
+            
+            .update-bell i, .suit-man-btn i {
                 font-size: 1.5rem;
             }
             
@@ -609,11 +654,16 @@
     <!-- Scanlines Effect -->
     <div class="scanlines"></div>
     
-    <!-- Updated Suit Man Icon (keeps update log functionality) -->
+    <!-- Update Bell Icon (keeps update log functionality) -->
     <div class="update-bell" id="updateBell">
-        <i class="fas fa-user-tie"></i>
+        <i class="fas fa-bell"></i>
         <div class="notification-badge">4</div>
     </div>
+    
+    <!-- New Suit Man Button -->
+    <a href="/editing" class="suit-man-btn" id="suitManBtn">
+        <i class="fas fa-user-tie"></i>
+    </a>
     
     <div class="container">
         <header>
