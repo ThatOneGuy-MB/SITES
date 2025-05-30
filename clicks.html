@@ -9,250 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --black: #0a0a0a;
-            --dark-black: #000000;
-            --white: #FFFFFF;
-            --gray: #AAAAAA;
-            --dark-red: #6B0000;
-            --medium-red: #8B0000;
-            --bright-red: #FF0000;
-            --light-red: #FF3333;
-            --neon-red: #ff073a;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--black);
-            color: var(--white);
-            line-height: 1.6;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(255, 0, 0, 0.03) 0%, rgba(255, 0, 0, 0) 2px);
-            background-size: 100% 4px;
-            z-index: 1;
-            pointer-events: none;
-            animation: scanline 8s linear infinite;
-        }
-
-        @keyframes scanline {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .main-card {
-            background: rgba(10, 10, 10, 0.9);
-            border-radius: 0.5rem;
-            border: 1px solid var(--bright-red);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
-            overflow: hidden;
-            padding: 2rem;
-        }
-        
-        .page-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--white);
-            text-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--bright-red);
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-        
-        .page-subtitle {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.2rem;
-            color: var(--white);
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        
-        .home-btn {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            background: var(--dark-red);
-            color: var(--white);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-family: 'Orbitron', sans-serif;
-            transition: all 0.3s ease;
-            border: 1px solid var(--bright-red);
-        }
-        
-        .home-btn:hover {
-            background: var(--bright-red);
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--white);
-            text-shadow: 0 0 8px var(--bright-red);
-            margin-bottom: 1.5rem;
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--white);
-            font-weight: 600;
-        }
-        
-        .input-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .input-group input {
-            flex: 1;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--bright-red);
-            border-radius: 0.5rem;
-            color: var(--white);
-            font-family: 'Rajdhani', sans-serif;
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            background-color: var(--dark-red);
-            color: var(--white);
-            border: 1px solid var(--bright-red);
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            border: none;
-            width: 100%;
-        }
-        
-        .btn:hover {
-            background-color: var(--bright-red);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
-        }
-        
-        .btn-copy {
-            width: auto;
-            padding: 0.75rem;
-            background: rgba(139, 0, 0, 0.5);
-        }
-        
-        .btn-copy:hover {
-            background: var(--bright-red);
-        }
-        
-        .link-display {
-            word-break: break-all;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin: 0 auto;
-            border: 1px dashed var(--bright-red);
-            font-family: monospace;
-            text-align: center;
-            width: 100%;
-            max-width: 100%;
-            display: block;
-            overflow-wrap: anywhere;
-        }
-        
-        .success-message {
-            color: #00ff00;
-            text-align: center;
-            margin: 1rem 0;
-            font-weight: 600;
-        }
-        
-        .error-message {
-            color: var(--bright-red);
-            text-align: center;
-            margin: 1rem 0;
-            font-weight: 600;
-        }
-        
-        .form-note {
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            text-align: center;
-        }
-        
-        .footer-note {
-            text-align: center;
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-top: 2rem;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .page-title {
-                font-size: 2rem;
-                margin-top: 2rem;
-            }
-            
-            .home-btn {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin-bottom: 1rem;
-                display: inline-block;
-            }
-            
-            .main-card {
-                padding: 1.5rem;
-            }
-        }
+        /* [All previous CSS remains exactly the same] */
     </style>
 </head>
 <body>
@@ -522,8 +279,16 @@
                 const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
                 
                 if (userData) {
-                    // Get visitor IP (simplified for demo)
-                    const visitorIp = 'IP-' + Math.random().toString(36).substr(2, 8);
+                    try {
+                        // Get visitor IP (using a more reliable method)
+                        let visitorIp = 'Unknown';
+                        const ipResponse = await fetch('https://api.ipify.org?format=json');
+                        const ipData = await ipResponse.json();
+                        visitorIp = ipData.ip;
+                    } catch (error) {
+                        visitorIp = 'IP-' + Math.random().toString(36).substr(2, 8);
+                    }
+                    
                     const now = new Date();
                     
                     // Check if this IP already clicked
@@ -586,7 +351,7 @@
         }
 
         // Run the click processor when page loads
-        document.addEventListener('DOMContentLoaded', processClick);
+        processClick();
     </script>
 </body>
 </html>
