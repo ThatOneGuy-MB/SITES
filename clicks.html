@@ -253,12 +253,47 @@
                 padding: 1.5rem;
             }
         }
+
+        /* Clicks page specific styles */
+        .clicks-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .clicks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--bright-red);
+        }
+
+        .clicks-table th, .clicks-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--medium-red);
+        }
+
+        .clicks-table th {
+            background: var(--dark-red);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .clicks-table tr:hover {
+            background: rgba(139, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
     <div class="scanlines"></div>
     
-    <div class="container">
+    <!-- Check if we're on the /clicks page -->
+    <script>
+        const isClicksPage = window.location.pathname === '/clicks' || window.location.pathname === '/clicks.html';
+    </script>
+
+    <div class="container" id="main-container" style="display: none;">
         <a href="/" class="home-btn">
             <i class="fas fa-home"></i> Home
         </a>
@@ -314,12 +349,34 @@
         </div>
     </div>
 
+    <!-- Clicks Page Content -->
+    <div class="clicks-container" id="clicks-container" style="display: none;">
+        <h1 class="page-title">CLICKS DASHBOARD</h1>
+        <div id="clicks-data">
+            <table class="clicks-table">
+                <thead>
+                    <tr>
+                        <th>Link ID</th>
+                        <th>Clicks</th>
+                        <th>Created At</th>
+                        <th>Gamepass URL</th>
+                    </tr>
+                </thead>
+                <tbody id="clicks-table-body">
+                    <!-- Data will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <script>
         // Configuration
         const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000' : window.location.origin;
         const PHARAOH_PFP = 'https://media.discordapp.net/attachments/1360001414813843589/1377923321957580822/PHARAOH_BE4M_PFP.gif';
         
         // DOM Elements
+        const mainContainer = document.getElementById('main-container');
+        const clicksContainer = document.getElementById('clicks-container');
         const initialSection = document.getElementById('initial-section');
         const linkSection = document.getElementById('link-section');
         const gamepassSection = document.getElementById('gamepass-section');
@@ -332,6 +389,45 @@
         const submitGamepassBtn = document.getElementById('submit-gamepass');
         const successMessage = document.getElementById('success-message');
         const gamepassError = document.getElementById('gamepass-error');
+        const clicksTableBody = document.getElementById('clicks-table-body');
+
+        // Show the appropriate container based on the page
+        if (window.location.pathname === '/clicks' || window.location.pathname === '/clicks.html') {
+            clicksContainer.style.display = 'block';
+            loadClicksData();
+        } else {
+            mainContainer.style.display = 'block';
+        }
+
+        // Load clicks data for the dashboard
+        function loadClicksData() {
+            const clicksData = [];
+            
+            // Get all stored links from localStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('link_')) {
+                    const data = JSON.parse(localStorage.getItem(key));
+                    clicksData.push(data);
+                }
+            }
+            
+            // Sort by most clicks first
+            clicksData.sort((a, b) => b.clicks - a.clicks);
+            
+            // Populate the table
+            clicksTableBody.innerHTML = '';
+            clicksData.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.linkId}</td>
+                    <td>${data.clicks}</td>
+                    <td>${new Date(data.createdAt).toLocaleString()}</td>
+                    <td>${data.gamepassUrl || 'Not submitted'}</td>
+                `;
+                clicksTableBody.appendChild(row);
+            });
+        }
         
         // Generate random link ID
         function generateLinkId() {
@@ -496,7 +592,10 @@
         });
 
         // Check if this is a generated link (for click tracking)
-        if (window.location.pathname.length > 1) {
+        if (window.location.pathname.length > 1 && 
+            window.location.pathname !== '/clicks' && 
+            window.location.pathname !== '/clicks.html') {
+            
             const linkId = window.location.pathname.substring(1);
             const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
             
