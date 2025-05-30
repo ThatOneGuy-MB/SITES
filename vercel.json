@@ -4,10 +4,3 @@
   ]
 }
 
-
-{
-  "routes": [
-    { "src": "/clicks", "dest": "/clicks.html" }
-  ]
-}
-
