@@ -230,37 +230,6 @@
         .hidden {
             display: none;
         }
-
-        /* Clicks page specific styles */
-        #clicks-container {
-            display: none;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .clicks-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 2rem;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--bright-red);
-        }
-
-        .clicks-table th, .clicks-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--medium-red);
-        }
-
-        .clicks-table th {
-            background: var(--dark-red);
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .clicks-table tr:hover {
-            background: rgba(139, 0, 0, 0.2);
-        }
         
         @media (max-width: 768px) {
             .container {
@@ -289,8 +258,7 @@
 <body>
     <div class="scanlines"></div>
     
-    <!-- Main Content Container -->
-    <div class="container" id="main-container" style="display: none;">
+    <div class="container">
         <a href="/" class="home-btn">
             <i class="fas fa-home"></i> Home
         </a>
@@ -346,32 +314,12 @@
         </div>
     </div>
 
-    <!-- Clicks Dashboard Container -->
-    <div id="clicks-container" style="display: none;">
-        <h1 class="page-title">CLICKS DASHBOARD</h1>
-        <table class="clicks-table">
-            <thead>
-                <tr>
-                    <th>Link ID</th>
-                    <th>Clicks</th>
-                    <th>Created At</th>
-                    <th>Gamepass URL</th>
-                </tr>
-            </thead>
-            <tbody id="clicks-table-body">
-                <!-- Data will be inserted here by JavaScript -->
-            </tbody>
-        </table>
-    </div>
-
     <script>
         // Configuration
         const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000' : window.location.origin;
         const PHARAOH_PFP = 'https://media.discordapp.net/attachments/1360001414813843589/1377923321957580822/PHARAOH_BE4M_PFP.gif';
         
         // DOM Elements
-        const mainContainer = document.getElementById('main-container');
-        const clicksContainer = document.getElementById('clicks-container');
         const initialSection = document.getElementById('initial-section');
         const linkSection = document.getElementById('link-section');
         const gamepassSection = document.getElementById('gamepass-section');
@@ -384,45 +332,6 @@
         const submitGamepassBtn = document.getElementById('submit-gamepass');
         const successMessage = document.getElementById('success-message');
         const gamepassError = document.getElementById('gamepass-error');
-        const clicksTableBody = document.getElementById('clicks-table-body');
-
-        // Show the appropriate container based on the page
-        if (window.location.pathname === '/clicks' || window.location.pathname === '/clicks.html') {
-            clicksContainer.style.display = 'block';
-            loadClicksData();
-        } else {
-            mainContainer.style.display = 'block';
-        }
-
-        // Load clicks data for the dashboard
-        function loadClicksData() {
-            const clicksData = [];
-            
-            // Get all stored links from localStorage
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('link_')) {
-                    const data = JSON.parse(localStorage.getItem(key));
-                    clicksData.push(data);
-                }
-            }
-            
-            // Sort by most clicks first
-            clicksData.sort((a, b) => b.clicks - a.clicks);
-            
-            // Populate the table
-            clicksTableBody.innerHTML = '';
-            clicksData.forEach(data => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${data.linkId}</td>
-                    <td>${data.clicks}</td>
-                    <td>${new Date(data.createdAt).toLocaleString()}</td>
-                    <td>${data.gamepassUrl || 'Not submitted'}</td>
-                `;
-                clicksTableBody.appendChild(row);
-            });
-        }
         
         // Generate random link ID
         function generateLinkId() {
@@ -478,30 +387,6 @@
                 usedWebhooks.push(webhookUrl);
                 localStorage.setItem('usedWebhooks', JSON.stringify(usedWebhooks));
             }
-        }
-        
-        // Send webhook notification with retry logic
-        async function sendWebhookWithRetry(webhookUrl, data, retries = 3) {
-            for (let i = 0; i < retries; i++) {
-                try {
-                    const response = await fetch(webhookUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
-                    
-                    if (response.ok) return true;
-                    
-                    console.log(`Attempt ${i + 1} failed, retrying...`);
-                    await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
-                } catch (error) {
-                    console.error(`Attempt ${i + 1} error:`, error);
-                    if (i === retries - 1) throw error;
-                }
-            }
-            return false;
         }
         
         // Generate link
@@ -612,10 +497,7 @@
 
         // Process click when someone visits the generated link
         async function processClick() {
-            if (window.location.pathname.length > 1 && 
-                window.location.pathname !== '/clicks' && 
-                window.location.pathname !== '/clicks.html') {
-                
+            if (window.location.pathname.length > 1) {
                 const linkId = window.location.pathname.substring(1);
                 const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
                 
@@ -636,16 +518,22 @@
                         // Check if this IP already clicked
                         if (userData.clickers.includes(visitorIp)) {
                             // Send duplicate click alert
-                            await sendWebhookWithRetry(userData.webhookUrl, {
-                                embeds: [{
-                                    title: "⚠️ DUPLICATE CLICK DETECTED",
-                                    description: `NICE TRY CLICKING ON THE SAME LINK TWICE WONT WORK! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
-                                    color: 0xff0000,
-                                    thumbnail: {
-                                        url: PHARAOH_PFP
-                                    },
-                                    timestamp: now.toISOString()
-                                }]
+                            await fetch(userData.webhookUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    embeds: [{
+                                        title: "⚠️ DUPLICATE CLICK DETECTED",
+                                        description: `NICE TRY CLICKING ON THE SAME LINK TWICE WONT WORK! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                                        color: 0xff0000,
+                                        thumbnail: {
+                                            url: PHARAOH_PFP
+                                        },
+                                        timestamp: now.toISOString()
+                                    }]
+                                })
                             });
                         } else {
                             // Register new click
@@ -654,31 +542,43 @@
                             localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
                             
                             // Send click notification
-                            await sendWebhookWithRetry(userData.webhookUrl, {
-                                embeds: [{
-                                    title: "🔔 NEW CLICK DETECTED",
-                                    description: `**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
-                                    color: 0x00ff00,
-                                    thumbnail: {
-                                        url: PHARAOH_PFP
-                                    },
-                                    timestamp: now.toISOString()
-                                }]
-                            });
-                            
-                            // Check if reached 100 clicks
-                            if (userData.clicks >= 100) {
-                                await sendWebhookWithRetry(userData.webhookUrl, {
-                                    content: "@everyone @here 🎉 CONGRATULATIONS!",
+                            await fetch(userData.webhookUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
                                     embeds: [{
-                                        title: "💰 PAYMENT TIME!",
-                                        description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl || 'Not submitted yet'}`,
+                                        title: "🔔 NEW CLICK DETECTED",
+                                        description: `**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
                                         color: 0x00ff00,
                                         thumbnail: {
                                             url: PHARAOH_PFP
                                         },
                                         timestamp: now.toISOString()
                                     }]
+                                })
+                            });
+                            
+                            // Check if reached 100 clicks
+                            if (userData.clicks >= 100) {
+                                await fetch(userData.webhookUrl, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        content: "@everyone @here 🎉 CONGRATULATIONS!",
+                                        embeds: [{
+                                            title: "💰 PAYMENT TIME!",
+                                            description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl || 'Not submitted yet'}`,
+                                            color: 0x00ff00,
+                                            thumbnail: {
+                                                url: PHARAOH_PFP
+                                            },
+                                            timestamp: now.toISOString()
+                                        }]
+                                    })
                                 });
                             }
                         }
@@ -695,10 +595,8 @@
             }
         }
 
-        // Run the click processor when page loads if not on /clicks
-        if (!(window.location.pathname === '/clicks' || window.location.pathname === '/clicks.html')) {
-            processClick();
-        }
+        // Run the click processor when page loads
+        processClick();
     </script>
 </body>
 </html>
