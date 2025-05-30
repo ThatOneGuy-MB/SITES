@@ -231,35 +231,6 @@
             display: none;
         }
         
-        .clicks-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .clicks-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 2rem;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--bright-red);
-        }
-
-        .clicks-table th, .clicks-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--medium-red);
-        }
-
-        .clicks-table th {
-            background: var(--dark-red);
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .clicks-table tr:hover {
-            background: rgba(139, 0, 0, 0.2);
-        }
-        
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -287,7 +258,7 @@
 <body>
     <div class="scanlines"></div>
     
-    <div class="container" id="main-container">
+    <div class="container">
         <a href="/" class="home-btn">
             <i class="fas fa-home"></i> Home
         </a>
@@ -416,6 +387,30 @@
                 usedWebhooks.push(webhookUrl);
                 localStorage.setItem('usedWebhooks', JSON.stringify(usedWebhooks));
             }
+        }
+        
+        // Send webhook notification with retry logic
+        async function sendWebhook(webhookUrl, data, retries = 3) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (response.ok) return true;
+                    
+                    console.log(`Webhook attempt ${i + 1} failed, retrying...`);
+                    await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+                } catch (error) {
+                    console.error(`Webhook attempt ${i + 1} error:`, error);
+                    if (i === retries - 1) throw error;
+                }
+            }
+            return false;
         }
         
         // Generate link
@@ -551,22 +546,16 @@
                         // Check if this IP already clicked
                         if (userData.clickers.includes(visitorIp)) {
                             // Send duplicate click alert
-                            await fetch(userData.webhookUrl, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    embeds: [{
-                                        title: "⚠️ DUPLICATE CLICK DETECTED",
-                                        description: `NICE TRY CLICKING ON THE SAME LINK TWICE WONT WORK! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
-                                        color: 0xff0000,
-                                        thumbnail: {
-                                            url: PHARAOH_PFP
-                                        },
-                                        timestamp: now.toISOString()
-                                    }]
-                                })
+                            await sendWebhook(userData.webhookUrl, {
+                                embeds: [{
+                                    title: "⚠️ DUPLICATE CLICK DETECTED",
+                                    description: `NICE TRY CLICKING ON THE SAME LINK TWICE WONT WORK! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                                    color: 0xff0000,
+                                    thumbnail: {
+                                        url: PHARAOH_PFP
+                                    },
+                                    timestamp: now.toISOString()
+                                }]
                             });
                         } else {
                             // Register new click
@@ -575,43 +564,31 @@
                             localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
                             
                             // Send click notification
-                            await fetch(userData.webhookUrl, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
+                            await sendWebhook(userData.webhookUrl, {
+                                embeds: [{
+                                    title: "🔔 NEW CLICK DETECTED",
+                                    description: `**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                                    color: 0x00ff00,
+                                    thumbnail: {
+                                        url: PHARAOH_PFP
+                                    },
+                                    timestamp: now.toISOString()
+                                }]
+                            });
+                            
+                            // Check if reached 100 clicks
+                            if (userData.clicks >= 100) {
+                                await sendWebhook(userData.webhookUrl, {
+                                    content: "@everyone @here 🎉 CONGRATULATIONS!",
                                     embeds: [{
-                                        title: "🔔 NEW CLICK DETECTED",
-                                        description: `**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                                        title: "💰 PAYMENT TIME!",
+                                        description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl || 'Not submitted yet'}`,
                                         color: 0x00ff00,
                                         thumbnail: {
                                             url: PHARAOH_PFP
                                         },
                                         timestamp: now.toISOString()
                                     }]
-                                })
-                            });
-                            
-                            // Check if reached 100 clicks
-                            if (userData.clicks >= 100) {
-                                await fetch(userData.webhookUrl, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        content: "@everyone @here 🎉 CONGRATULATIONS!",
-                                        embeds: [{
-                                            title: "💰 PAYMENT TIME!",
-                                            description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl || 'Not submitted yet'}`,
-                                            color: 0x00ff00,
-                                            thumbnail: {
-                                                url: PHARAOH_PFP
-                                            },
-                                            timestamp: now.toISOString()
-                                        }]
-                                    })
                                 });
                             }
                         }
@@ -629,7 +606,7 @@
         }
 
         // Run the click processor when page loads
-        processClick();
+        window.addEventListener('DOMContentLoaded', processClick);
     </script>
 </body>
 </html>
