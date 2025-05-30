@@ -231,6 +231,35 @@
             display: none;
         }
         
+        .clicks-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .clicks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--bright-red);
+        }
+
+        .clicks-table th, .clicks-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--medium-red);
+        }
+
+        .clicks-table th {
+            background: var(--dark-red);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .clicks-table tr:hover {
+            background: rgba(139, 0, 0, 0.2);
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -258,7 +287,7 @@
 <body>
     <div class="scanlines"></div>
     
-    <div class="container">
+    <div class="container" id="main-container">
         <a href="/" class="home-btn">
             <i class="fas fa-home"></i> Home
         </a>
@@ -497,7 +526,11 @@
 
         // Process click when someone visits the generated link
         async function processClick() {
-            if (window.location.pathname.length > 1) {
+            // Only process if it's a tracking link (not homepage and not /clicks)
+            if (window.location.pathname.length > 1 && 
+                window.location.pathname !== '/clicks' && 
+                window.location.pathname !== '/clicks.html') {
+                
                 const linkId = window.location.pathname.substring(1);
                 const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
                 
