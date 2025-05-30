@@ -1,11 +1,6 @@
 {
   "routes": [
-    { "src": "/editing", "dest": "/editing.html" }
-  ]
-}
-{
-  "routes": [
+    { "src": "/editing", "dest": "/editing.html" },
     { "src": "/clicks", "dest": "/clicks.html" }
   ]
 }
-
