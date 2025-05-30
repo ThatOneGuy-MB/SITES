@@ -512,59 +512,45 @@
             submitGamepassBtn.innerHTML = '<i class="fas fa-check"></i> SUBMITTED';
         });
 
-        // Check if this is a generated link (for click tracking)
-        if (window.location.pathname.length > 1 && 
-            window.location.pathname !== '/clicks' && 
-            window.location.pathname !== '/clicks.html') {
-            
-            const linkId = window.location.pathname.substring(1);
-            const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
-            
-            if (userData) {
-                // Get visitor IP (simplified for demo)
-                const visitorIp = 'IP-' + Math.random().toString(36).substr(2, 8);
-                const now = new Date();
+        // Process click when someone visits the generated link
+        async function processClick() {
+            if (window.location.pathname.length > 1 && 
+                window.location.pathname !== '/clicks' && 
+                window.location.pathname !== '/clicks.html') {
                 
-                // Check if this IP already clicked
-                if (userData.clickers.includes(visitorIp)) {
-                    // Send duplicate click alert
-                    await sendWebhook(userData.webhookUrl, {
-                        embeds: [{
-                            title: "⚠️ DUPLICATE CLICK DETECTED",
-                            description: `NICE TRY CLICKING ON THE SAME LINK TWICE WONT WORK! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
-                            color: 0xff0000,
-                            thumbnail: {
-                                url: PHARAOH_PFP
-                            },
-                            timestamp: now.toISOString()
-                        }]
-                    });
-                } else {
-                    // Register new click
-                    userData.clicks++;
-                    userData.clickers.push(visitorIp);
-                    localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
+                const linkId = window.location.pathname.substring(1);
+                const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
+                
+                if (userData) {
+                    // Get visitor IP (simplified for demo)
+                    const visitorIp = 'IP-' + Math.random().toString(36).substr(2, 8);
+                    const now = new Date();
                     
-                    // Send click notification
-                    await sendWebhook(userData.webhookUrl, {
-                        embeds: [{
-                            title: "🔔 NEW CLICK DETECTED",
-                            description: `**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
-                            color: 0x00ff00,
-                            thumbnail: {
-                                url: PHARAOH_PFP
-                            },
-                            timestamp: now.toISOString()
-                        }]
-                    });
-                    
-                    // Check if reached 100 clicks
-                    if (userData.clicks >= 100) {
+                    // Check if this IP already clicked
+                    if (userData.clickers.includes(visitorIp)) {
+                        // Send duplicate click alert
                         await sendWebhook(userData.webhookUrl, {
-                            content: "@everyone @here 🎉 CONGRATULATIONS!",
                             embeds: [{
-                                title: "💰 PAYMENT TIME!",
-                                description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl || 'Not submitted yet'}`,
+                                title: "⚠️ DUPLICATE CLICK DETECTED",
+                                description: `NICE TRY CLICKING ON THE SAME LINK TWICE WONT WORK! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                                color: 0xff0000,
+                                thumbnail: {
+                                    url: PHARAOH_PFP
+                                },
+                                timestamp: now.toISOString()
+                            }]
+                        });
+                    } else {
+                        // Register new click
+                        userData.clicks++;
+                        userData.clickers.push(visitorIp);
+                        localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
+                        
+                        // Send click notification
+                        await sendWebhook(userData.webhookUrl, {
+                            embeds: [{
+                                title: "🔔 NEW CLICK DETECTED",
+                                description: `**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
                                 color: 0x00ff00,
                                 thumbnail: {
                                     url: PHARAOH_PFP
@@ -572,16 +558,35 @@
                                 timestamp: now.toISOString()
                             }]
                         });
+                        
+                        // Check if reached 100 clicks
+                        if (userData.clicks >= 100) {
+                            await sendWebhook(userData.webhookUrl, {
+                                content: "@everyone @here 🎉 CONGRATULATIONS!",
+                                embeds: [{
+                                    title: "💰 PAYMENT TIME!",
+                                    description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl || 'Not submitted yet'}`,
+                                    color: 0x00ff00,
+                                    thumbnail: {
+                                        url: PHARAOH_PFP
+                                    },
+                                    timestamp: now.toISOString()
+                                }]
+                            });
+                        }
                     }
+                    
+                    // Redirect to homepage without showing the path
+                    window.location.href = BASE_URL;
+                } else {
+                    // Invalid link ID, redirect to home
+                    window.location.href = BASE_URL;
                 }
-                
-                // Redirect to homepage without showing the path
-                window.location.href = BASE_URL;
-            } else {
-                // Invalid link ID, redirect to home
-                window.location.href = BASE_URL;
             }
         }
+
+        // Run the click processor when page loads
+        document.addEventListener('DOMContentLoaded', processClick);
     </script>
 </body>
 </html>
