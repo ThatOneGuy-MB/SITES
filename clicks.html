@@ -389,6 +389,23 @@
             }
         }
         
+        // Send webhook notification
+        async function sendWebhook(webhookUrl, data) {
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                return response.ok;
+            } catch (error) {
+                console.error('Error sending webhook:', error);
+                return false;
+            }
+        }
+        
         // Generate link
         generateBtn.addEventListener('click', async () => {
             const webhookUrl = webhookUrlInput.value.trim();
@@ -511,22 +528,16 @@
                 // Check if this IP already clicked
                 if (userData.clickers.includes(visitorIp)) {
                     // Send duplicate click alert
-                    fetch(userData.webhookUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            embeds: [{
-                                title: "⚠️ DUPLICATE CLICK DETECTED",
-                                description: `NICE TRY FAGGOT CLICKING ON THE SAME LINK TWICE WONT WORK CLOWN! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
-                                color: 0xff0000,
-                                thumbnail: {
-                                    url: PHARAOH_PFP
-                                },
-                                timestamp: now.toISOString()
-                            }]
-                        })
+                    await sendWebhook(userData.webhookUrl, {
+                        embeds: [{
+                            title: "⚠️ DUPLICATE CLICK DETECTED",
+                            description: `NICE TRY CLICKING ON THE SAME LINK TWICE WONT WORK! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                            color: 0xff0000,
+                            thumbnail: {
+                                url: PHARAOH_PFP
+                            },
+                            timestamp: now.toISOString()
+                        }]
                     });
                 } else {
                     // Register new click
@@ -535,43 +546,31 @@
                     localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
                     
                     // Send click notification
-                    fetch(userData.webhookUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
+                    await sendWebhook(userData.webhookUrl, {
+                        embeds: [{
+                            title: "🔔 NEW CLICK DETECTED",
+                            description: `**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                            color: 0x00ff00,
+                            thumbnail: {
+                                url: PHARAOH_PFP
+                            },
+                            timestamp: now.toISOString()
+                        }]
+                    });
+                    
+                    // Check if reached 100 clicks
+                    if (userData.clicks >= 100) {
+                        await sendWebhook(userData.webhookUrl, {
+                            content: "@everyone @here 🎉 CONGRATULATIONS!",
                             embeds: [{
-                                title: "🔔 NEW CLICK DETECTED",
-                                description: `**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                                title: "💰 PAYMENT TIME!",
+                                description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl || 'Not submitted yet'}`,
                                 color: 0x00ff00,
                                 thumbnail: {
                                     url: PHARAOH_PFP
                                 },
                                 timestamp: now.toISOString()
                             }]
-                        })
-                    });
-                    
-                    // Check if reached 100 clicks
-                    if (userData.clicks >= 100) {
-                        fetch(userData.webhookUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                content: "@everyone @here 🎉 CONGRATULATIONS!",
-                                embeds: [{
-                                    title: "💰 PAYMENT TIME!",
-                                    description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl}`,
-                                    color: 0x00ff00,
-                                    thumbnail: {
-                                        url: PHARAOH_PFP
-                                    },
-                                    timestamp: now.toISOString()
-                                }]
-                            })
                         });
                     }
                 }
