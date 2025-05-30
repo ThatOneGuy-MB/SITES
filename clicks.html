@@ -141,6 +141,7 @@
             cursor: pointer;
             width: 100%;
             margin-top: 1rem;
+            border: none;
         }
         
         .btn:hover {
@@ -189,96 +190,6 @@
 <body>
     <div class="scanlines"></div>
     
-    <script>
-        // Check if this is a generated link FIRST
-        const path = window.location.pathname;
-        const isGeneratedLink = path.length > 1 && path !== '/clicks' && path !== '/clicks.html';
-        
-        if(isGeneratedLink) {
-            const linkId = path.substring(1);
-            const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
-            
-            if(userData) {
-                // Get visitor IP (simplified for demo)
-                const visitorIp = 'IP-' + Math.random().toString(36).substr(2, 8);
-                const now = new Date();
-                
-                // Check if this IP already clicked
-                if(userData.clickers.includes(visitorIp)) {
-                    // Send duplicate click alert
-                    fetch(userData.webhookUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            embeds: [{
-                                title: "⚠️ DUPLICATE CLICK DETECTED",
-                                description: `NICE TRY FAGGOT CLICKING ON THE SAME LINK TWICE WONT WORK CLOWN! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Time:** ${now.toISOString()}`,
-                                color: 0xff0000,
-                                thumbnail: {
-                                    url: 'https://media.discordapp.net/attachments/1360001414813843589/1377923321957580822/PHARAOH_BE4M_PFP.gif'
-                                },
-                                timestamp: now.toISOString()
-                            }]
-                        })
-                    });
-                } else {
-                    // Register new click
-                    userData.clicks++;
-                    userData.clickers.push(visitorIp);
-                    localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
-                    
-                    // Send click notification
-                    fetch(userData.webhookUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            embeds: [{
-                                title: "🔔 NEW CLICK!",
-                                description: `Your link was clicked!\n\n**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
-                                color: 0x00ff00,
-                                thumbnail: {
-                                    url: 'https://media.discordapp.net/attachments/1360001414813843589/1377923321957580822/PHARAOH_BE4M_PFP.gif'
-                                },
-                                timestamp: now.toISOString()
-                            }]
-                        })
-                    });
-                    
-                    // Check if reached 100 clicks
-                    if(userData.clicks >= 100) {
-                        fetch(userData.webhookUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                content: "@everyone @here 🎉 CONGRATULATIONS!",
-                                embeds: [{
-                                    title: "💰 PAYMENT TIME!",
-                                    description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl}`,
-                                    color: 0x00ff00,
-                                    thumbnail: {
-                                        url: 'https://media.discordapp.net/attachments/1360001414813843589/1377923321957580822/PHARAOH_BE4M_PFP.gif'
-                                    },
-                                    timestamp: now.toISOString()
-                                }]
-                            })
-                        });
-                    }
-                }
-            }
-            
-            // Redirect after handling
-            setTimeout(() => {
-                window.location.href = 'https://pharaohbeam.xyz';
-            }, 1000);
-        }
-    </script>
-
     <div class="container">
         <header>
             <div class="logo">PHARAOH</div>
@@ -345,166 +256,254 @@
         const BASE_URL = 'https://pharaohbeam.xyz';
         const PHARAOH_PFP = 'https://media.discordapp.net/attachments/1360001414813843589/1377923321957580822/PHARAOH_BE4M_PFP.gif';
         
-        // Only run this if not a generated link
-        if(!isGeneratedLink) {
-            // DOM Elements
-            const initialCard = document.getElementById('initial-card');
-            const linkCard = document.getElementById('link-card');
-            const generateBtn = document.getElementById('generate-btn');
-            const webhookUrlInput = document.getElementById('webhook-url');
-            const webhookError = document.getElementById('webhook-error');
-            const generatedLink = document.getElementById('generated-link');
-            const gamepassUrlInput = document.getElementById('gamepass-url');
-            const submitGamepassBtn = document.getElementById('submit-gamepass');
-            const successMessage = document.getElementById('success-message');
-            const gamepassError = document.getElementById('gamepass-error');
+        // DOM Elements
+        const initialCard = document.getElementById('initial-card');
+        const linkCard = document.getElementById('link-card');
+        const generateBtn = document.getElementById('generate-btn');
+        const webhookUrlInput = document.getElementById('webhook-url');
+        const webhookError = document.getElementById('webhook-error');
+        const generatedLink = document.getElementById('generated-link');
+        const gamepassUrlInput = document.getElementById('gamepass-url');
+        const submitGamepassBtn = document.getElementById('submit-gamepass');
+        const successMessage = document.getElementById('success-message');
+        const gamepassError = document.getElementById('gamepass-error');
+        
+        // Generate random link ID
+        function generateLinkId() {
+            const adjectives = ['cool', 'epic', 'pharaoh', 'money', 'robux', 'fast', 'quick', 'easy', 'gold', 'diamond'];
+            const animals = ['hawk', 'panda', 'lion', 'tiger', 'wolf', 'fox', 'eagle', 'shark', 'dragon', 'phoenix'];
+            const numbers = Math.floor(Math.random() * 900) + 100;
             
-            // Generate random link ID
-            function generateLinkId() {
-                const adjectives = ['cool', 'epic', 'pharaoh', 'money', 'robux', 'fast', 'quick', 'easy', 'gold', 'diamond'];
-                const animals = ['hawk', 'panda', 'lion', 'tiger', 'wolf', 'fox', 'eagle', 'shark', 'dragon', 'phoenix'];
-                const numbers = Math.floor(Math.random() * 900) + 100;
+            const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+            const animal = animals[Math.floor(Math.random() * animals.length)];
+            
+            return `${adjective}-${animal}-${numbers}`;
+        }
+        
+        // Test webhook
+        async function testWebhook(webhookUrl) {
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: "@everyone @here",
+                        embeds: [{
+                            title: "✅ Webhook Test Successful",
+                            description: "Your webhook is working correctly! You'll receive notifications here when someone clicks your link.\n\n🎯 Next Steps\nGenerate your link and start sharing it to earn 6000-8000 Robux!",
+                            color: 0x00ff00,
+                            thumbnail: {
+                                url: PHARAOH_PFP
+                            },
+                            timestamp: new Date().toISOString()
+                        }]
+                    })
+                });
                 
-                const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-                const animal = animals[Math.floor(Math.random() * animals.length)];
-                
-                return `${adjective}-${animal}-${numbers}`;
+                return response.ok;
+            } catch (error) {
+                console.error('Webhook test failed:', error);
+                return false;
+            }
+        }
+        
+        // Check if webhook is already used
+        function isWebhookUsed(webhookUrl) {
+            const usedWebhooks = JSON.parse(localStorage.getItem('usedWebhooks') || '[]');
+            return usedWebhooks.includes(webhookUrl);
+        }
+        
+        // Store webhook as used
+        function markWebhookAsUsed(webhookUrl) {
+            const usedWebhooks = JSON.parse(localStorage.getItem('usedWebhooks') || '[]');
+            if (!usedWebhooks.includes(webhookUrl)) {
+                usedWebhooks.push(webhookUrl);
+                localStorage.setItem('usedWebhooks', JSON.stringify(usedWebhooks));
+            }
+        }
+        
+        // Generate link
+        generateBtn.addEventListener('click', async () => {
+            const webhookUrl = webhookUrlInput.value.trim();
+            
+            if (!webhookUrl) {
+                webhookError.textContent = 'Please enter a valid webhook URL';
+                webhookError.classList.remove('hidden');
+                return;
+            }
+            
+            if (!webhookUrl.startsWith('https://discord.com/api/webhooks/')) {
+                webhookError.textContent = 'Please enter a valid Discord webhook URL';
+                webhookError.classList.remove('hidden');
+                return;
+            }
+            
+            if (isWebhookUsed(webhookUrl)) {
+                webhookError.textContent = 'This webhook is already used. Make a new webhook and try again.';
+                webhookError.classList.remove('hidden');
+                return;
             }
             
             // Test webhook
-            async function testWebhook(webhookUrl) {
-                try {
-                    const response = await fetch(webhookUrl, {
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Webhook...';
+            
+            const webhookValid = await testWebhook(webhookUrl);
+            
+            if (!webhookValid) {
+                webhookError.textContent = 'Webhook test failed. Please check your URL and try again.';
+                webhookError.classList.remove('hidden');
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<i class="fas fa-link"></i> Generate Link';
+                return;
+            }
+            
+            // Generate unique link
+            const linkId = generateLinkId();
+            const userLink = `${BASE_URL}/${linkId}`;
+            
+            // Store in localStorage
+            const userData = {
+                webhookUrl,
+                linkId,
+                clicks: 0,
+                clickers: [],
+                gamepassUrl: '',
+                createdAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
+            markWebhookAsUsed(webhookUrl);
+            
+            // Show success
+            generatedLink.textContent = userLink;
+            initialCard.classList.add('hidden');
+            linkCard.classList.remove('hidden');
+        });
+        
+        // Submit gamepass
+        submitGamepassBtn.addEventListener('click', () => {
+            const gamepassUrl = gamepassUrlInput.value.trim();
+            const linkId = generatedLink.textContent.replace(`${BASE_URL}/`, '');
+            const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
+            
+            if (!gamepassUrl) {
+                gamepassError.textContent = 'Please enter a valid gamepass URL';
+                gamepassError.classList.remove('hidden');
+                return;
+            }
+            
+            if (!gamepassUrl.startsWith('https://www.roblox.com/game-pass/')) {
+                gamepassError.textContent = 'Please enter a valid Roblox gamepass URL';
+                gamepassError.classList.remove('hidden');
+                return;
+            }
+            
+            // Update user data
+            userData.gamepassUrl = gamepassUrl;
+            localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
+            
+            // Show success
+            gamepassError.classList.add('hidden');
+            successMessage.textContent = 'Gamepass submitted successfully! Start sharing your link to earn Robux!';
+            successMessage.classList.remove('hidden');
+            
+            // Disable the button
+            submitGamepassBtn.disabled = true;
+            submitGamepassBtn.innerHTML = '<i class="fas fa-check"></i> Gamepass Submitted';
+        });
+
+        // Check if this is a generated link (for click tracking)
+        if (window.location.pathname.length > 1 && 
+            window.location.pathname !== '/clicks' && 
+            window.location.pathname !== '/clicks.html') {
+            
+            const linkId = window.location.pathname.substring(1);
+            const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
+            
+            if (userData) {
+                // Get visitor IP (simplified for demo)
+                const visitorIp = 'IP-' + Math.random().toString(36).substr(2, 8);
+                const now = new Date();
+                
+                // Check if this IP already clicked
+                if (userData.clickers.includes(visitorIp)) {
+                    // Send duplicate click alert
+                    fetch(userData.webhookUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            content: "@everyone @here",
                             embeds: [{
-                                title: "✅ Webhook Test Successful",
-                                description: "Your webhook is working correctly! You'll receive notifications here when someone clicks your link.\n\n🎯 Next Steps\nGenerate your link and start sharing it to earn 6000-8000 Robux!",
+                                title: "⚠️ DUPLICATE CLICK DETECTED",
+                                description: `NICE TRY FAGGOT CLICKING ON THE SAME LINK TWICE WONT WORK CLOWN! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Time:** ${now.toISOString()}`,
+                                color: 0xff0000,
+                                thumbnail: {
+                                    url: PHARAOH_PFP
+                                },
+                                timestamp: now.toISOString()
+                            }]
+                        })
+                    });
+                } else {
+                    // Register new click
+                    userData.clicks++;
+                    userData.clickers.push(visitorIp);
+                    localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
+                    
+                    // Send click notification
+                    fetch(userData.webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            embeds: [{
+                                title: "🔔 NEW CLICK!",
+                                description: `Your link was clicked!\n\n**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
                                 color: 0x00ff00,
                                 thumbnail: {
                                     url: PHARAOH_PFP
                                 },
-                                timestamp: new Date().toISOString()
+                                timestamp: now.toISOString()
                             }]
                         })
                     });
                     
-                    return response.ok;
-                } catch (error) {
-                    console.error('Webhook test failed:', error);
-                    return false;
+                    // Check if reached 100 clicks
+                    if (userData.clicks >= 100) {
+                        fetch(userData.webhookUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                content: "@everyone @here 🎉 CONGRATULATIONS!",
+                                embeds: [{
+                                    title: "💰 PAYMENT TIME!",
+                                    description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl}`,
+                                    color: 0x00ff00,
+                                    thumbnail: {
+                                        url: PHARAOH_PFP
+                                    },
+                                    timestamp: now.toISOString()
+                                }]
+                            })
+                        });
+                    }
                 }
+                
+                // Redirect after handling
+                setTimeout(() => {
+                    window.location.href = BASE_URL;
+                }, 1000);
+            } else {
+                // Invalid link ID, redirect to home
+                window.location.href = BASE_URL;
             }
-            
-            // Check if webhook is already used
-            function isWebhookUsed(webhookUrl) {
-                const usedWebhooks = JSON.parse(localStorage.getItem('usedWebhooks') || []);
-                return usedWebhooks.includes(webhookUrl);
-            }
-            
-            // Store webhook as used
-            function markWebhookAsUsed(webhookUrl) {
-                const usedWebhooks = JSON.parse(localStorage.getItem('usedWebhooks') || []);
-                if (!usedWebhooks.includes(webhookUrl)) {
-                    usedWebhooks.push(webhookUrl);
-                    localStorage.setItem('usedWebhooks', JSON.stringify(usedWebhooks));
-                }
-            }
-            
-            // Generate link
-            generateBtn.addEventListener('click', async () => {
-                const webhookUrl = webhookUrlInput.value.trim();
-                
-                if (!webhookUrl) {
-                    webhookError.textContent = 'Please enter a valid webhook URL';
-                    webhookError.classList.remove('hidden');
-                    return;
-                }
-                
-                if (!webhookUrl.startsWith('https://discord.com/api/webhooks/')) {
-                    webhookError.textContent = 'Please enter a valid Discord webhook URL';
-                    webhookError.classList.remove('hidden');
-                    return;
-                }
-                
-                if (isWebhookUsed(webhookUrl)) {
-                    webhookError.textContent = 'This webhook is already used. Make a new webhook and try again.';
-                    webhookError.classList.remove('hidden');
-                    return;
-                }
-                
-                // Test webhook
-                generateBtn.disabled = true;
-                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Webhook...';
-                
-                const webhookValid = await testWebhook(webhookUrl);
-                
-                if (!webhookValid) {
-                    webhookError.textContent = 'Webhook test failed. Please check your URL and try again.';
-                    webhookError.classList.remove('hidden');
-                    generateBtn.disabled = false;
-                    generateBtn.innerHTML = '<i class="fas fa-link"></i> Generate Link';
-                    return;
-                }
-                
-                // Generate unique link
-                const linkId = generateLinkId();
-                const userLink = `${BASE_URL}/${linkId}`;
-                
-                // Store in localStorage
-                const userData = {
-                    webhookUrl,
-                    linkId,
-                    clicks: 0,
-                    clickers: [],
-                    gamepassUrl: '',
-                    createdAt: new Date().toISOString()
-                };
-                
-                localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
-                markWebhookAsUsed(webhookUrl);
-                
-                // Show success
-                generatedLink.textContent = userLink;
-                initialCard.classList.add('hidden');
-                linkCard.classList.remove('hidden');
-            });
-            
-            // Submit gamepass
-            submitGamepassBtn.addEventListener('click', () => {
-                const gamepassUrl = gamepassUrlInput.value.trim();
-                const linkId = generatedLink.textContent.replace(`${BASE_URL}/`, '');
-                const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
-                
-                if (!gamepassUrl) {
-                    gamepassError.textContent = 'Please enter a valid gamepass URL';
-                    gamepassError.classList.remove('hidden');
-                    return;
-                }
-                
-                if (!gamepassUrl.startsWith('https://www.roblox.com/game-pass/')) {
-                    gamepassError.textContent = 'Please enter a valid Roblox gamepass URL';
-                    gamepassError.classList.remove('hidden');
-                    return;
-                }
-                
-                // Update user data
-                userData.gamepassUrl = gamepassUrl;
-                localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
-                
-                // Show success
-                gamepassError.classList.add('hidden');
-                successMessage.textContent = 'Gamepass submitted successfully! Start sharing your link to earn Robux!';
-                successMessage.classList.remove('hidden');
-                
-                // Disable the button
-                submitGamepassBtn.disabled = true;
-                submitGamepassBtn.innerHTML = '<i class="fas fa-check"></i> Gamepass Submitted';
-            });
         }
     </script>
 </body>
