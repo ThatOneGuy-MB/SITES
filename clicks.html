@@ -3,16 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHARAOH - CLICKS TRACKER</title>
-    
-    <!-- Fonts -->
+    <title>PHARAOH - MAKE MONEY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
             --black: #0a0a0a;
@@ -41,18 +36,13 @@
             overflow-x: hidden;
         }
 
-        /* Scanlines Effect */
         .scanlines {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(255, 0, 0, 0.03) 0%,
-                rgba(255, 0, 0, 0) 2px
-            );
+            background: linear-gradient(to bottom, rgba(255, 0, 0, 0.03) 0%, rgba(255, 0, 0, 0) 2px);
             background-size: 100% 4px;
             z-index: 1;
             pointer-events: none;
@@ -65,66 +55,72 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 2rem;
             position: relative;
             z-index: 2;
-            animation: fadeIn 1s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
         
         header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            padding: 3rem 0;
-            flex-wrap: wrap;
-            border-bottom: 1px solid var(--bright-red);
+            text-align: center;
             margin-bottom: 2rem;
         }
         
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
+            font-size: 3rem;
             font-weight: 700;
             color: var(--white);
             text-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--bright-red);
-            position: relative;
-            letter-spacing: 2px;
+            margin-bottom: 1rem;
         }
         
         .subtitle {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
             color: var(--white);
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--bright-red);
+            box-shadow: 0 8px 32px rgba(139, 0, 0, 0.3);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+            text-shadow: 0 0 8px var(--bright-red);
+            margin-bottom: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
             text-align: center;
-            margin-bottom: 1rem;
         }
         
-        .logo::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: radial-gradient(circle, var(--bright-red), transparent 70%);
-            z-index: -1;
-            opacity: 0.3;
-            border-radius: 50%;
-            animation: pulse 2s infinite alternate;
+        .form-group {
+            margin-bottom: 1.5rem;
         }
         
-        @keyframes pulse {
-            from { transform: scale(0.95); opacity: 0.3; }
-            to { transform: scale(1.05); opacity: 0.5; }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--bright-red);
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--bright-red);
+            border-radius: 0.5rem;
+            color: var(--white);
+            font-family: 'Rajdhani', sans-serif;
         }
         
         .btn {
@@ -141,10 +137,10 @@
             color: var(--white);
             border: 1px solid var(--bright-red);
             box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
             font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
         }
         
         .btn:hover {
@@ -153,282 +149,363 @@
             box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
         }
         
-        .card {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--bright-red);
-            box-shadow: 0 8px 32px rgba(139, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(255, 0, 0, 0.4);
-        }
-        
-        .card-header {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        
-        .card-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--white);
-            text-shadow: 0 0 8px var(--bright-red);
-            position: relative;
-            display: inline-block;
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        .card-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(to right, transparent, var(--bright-red), transparent);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .stat-card {
+        .link-display {
+            word-break: break-all;
             background: rgba(139, 0, 0, 0.3);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            border: 1px solid var(--bright-red);
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.2);
-        }
-        
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--bright-red);
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        .stat-label {
-            color: var(--gray);
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-        }
-        
-        .click-history {
-            margin-top: 2rem;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid var(--bright-red);
-            border-radius: 0.5rem;
             padding: 1rem;
-            background: rgba(0, 0, 0, 0.5);
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            border: 1px dashed var(--bright-red);
+            text-align: center;
         }
         
-        .click-item {
-            padding: 0.75rem;
-            border-bottom: 1px solid rgba(139, 0, 0, 0.3);
-            display: flex;
-            justify-content: space-between;
+        .success-message {
+            color: #00ff00;
+            text-align: center;
+            margin: 1rem 0;
         }
         
-        .click-item:last-child {
-            border-bottom: none;
-        }
-        
-        .click-time {
+        .error-message {
             color: var(--bright-red);
-            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin: 1rem 0;
         }
         
-        .click-source {
-            color: var(--white);
+        .hidden {
+            display: none;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
             .logo {
-                font-size: 2.8rem;
-            }
-            
-            .subtitle {
-                font-size: 1.2rem;
-            }
-            
-            header {
-                flex-direction: column;
-                gap: 1.5rem;
-                padding: 2rem 0;
-            }
-            
-            .card {
-                padding: 1.5rem;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Scanlines Effect -->
     <div class="scanlines"></div>
     
     <div class="container">
         <header>
-            <h1 class="logo">PHARAOH</h1>
-            <p class="subtitle">CLICKS TRACKER</p>
+            <div class="logo">PHARAOH</div>
+            <div class="subtitle">MAKE MONEY</div>
             <a href="/" class="btn">
-                <i class="fas fa-home"></i> Back to Main
+                <i class="fas fa-home"></i> Home
             </a>
         </header>
         
         <main>
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">SITE CLICKS STATISTICS</h2>
+            <div class="card" id="initial-card">
+                <h2 class="card-title">EARN ROBUX</h2>
+                <p style="text-align: center; margin-bottom: 1.5rem;">
+                    Generate your own link, share it, and earn 6000-8000 Robux when you reach 100 clicks!
+                </p>
+                
+                <div class="form-group">
+                    <label for="webhook-url">Your Discord Webhook URL</label>
+                    <input type="text" id="webhook-url" placeholder="https://discord.com/api/webhooks/...">
+                    <small style="color: var(--gray);">We'll send notifications to this webhook when someone clicks your link.</small>
                 </div>
                 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value" id="today-clicks">0</div>
-                        <div class="stat-label">Clicks Today</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="total-clicks">0</div>
-                        <div class="stat-label">Total Clicks</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="unique-visitors">0</div>
-                        <div class="stat-label">Unique Visitors</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="current-online">0</div>
-                        <div class="stat-label">Currently Online</div>
-                    </div>
+                <button id="generate-btn" class="btn">
+                    <i class="fas fa-link"></i> Generate Link
+                </button>
+                
+                <div id="webhook-error" class="error-message hidden"></div>
+            </div>
+            
+            <div class="card hidden" id="link-card">
+                <h2 class="card-title">YOUR LINK IS READY!</h2>
+                <p style="text-align: center; margin-bottom: 1.5rem;">
+                    Share this link to earn Robux when people click it!
+                </p>
+                
+                <div class="link-display" id="generated-link">
+                    https://sites-pharaoh.vercel.app/loading...
                 </div>
                 
-                <div class="click-history">
-                    <h3 style="text-align: center; margin-bottom: 1rem; color: var(--bright-red);">RECENT CLICKS</h3>
-                    <div id="click-list">
-                        <!-- Click items will be added here by JavaScript -->
-                    </div>
+                <div class="form-group">
+                    <label for="gamepass-url">Submit Your Gamepass</label>
+                    <p style="margin-bottom: 1rem; color: var(--gray);">
+                        Create a Roblox gamepass for 6000-8000 Robux and submit the link below. We'll automatically purchase it when you reach 100 clicks!
+                    </p>
+                    <input type="text" id="gamepass-url" placeholder="https://www.roblox.com/game-pass/...">
                 </div>
+                
+                <button id="submit-gamepass" class="btn">
+                    <i class="fas fa-check"></i> Submit Gamepass
+                </button>
+                
+                <div id="success-message" class="success-message hidden"></div>
+                <div id="gamepass-error" class="error-message hidden"></div>
+                
+                <p style="text-align: center; margin-top: 1.5rem; color: var(--gray);">
+                    If you have any issues, make ticket in our discord server <strong>discord.gg/phar</strong>
+                </p>
             </div>
         </main>
     </div>
-    
+
     <script>
-        // Function to format date/time
-        function formatDateTime(date) {
-            const options = {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
+        // Configuration
+        const BASE_URL = 'https://sites-pharaoh.vercel.app';
+        const PHARAOH_PFP = 'https://media.discordapp.net/attachments/1360001414813843589/1377923321957580822/PHARAOH_BE4M_PFP.gif';
+        
+        // DOM Elements
+        const initialCard = document.getElementById('initial-card');
+        const linkCard = document.getElementById('link-card');
+        const generateBtn = document.getElementById('generate-btn');
+        const webhookUrlInput = document.getElementById('webhook-url');
+        const webhookError = document.getElementById('webhook-error');
+        const generatedLink = document.getElementById('generated-link');
+        const gamepassUrlInput = document.getElementById('gamepass-url');
+        const submitGamepassBtn = document.getElementById('submit-gamepass');
+        const successMessage = document.getElementById('success-message');
+        const gamepassError = document.getElementById('gamepass-error');
+        
+        // Generate random link ID
+        function generateLinkId() {
+            const adjectives = ['cool', 'epic', 'pharaoh', 'money', 'robux', 'fast', 'quick', 'easy', 'gold', 'diamond'];
+            const animals = ['hawk', 'panda', 'lion', 'tiger', 'wolf', 'fox', 'eagle', 'shark', 'dragon', 'phoenix'];
+            const numbers = Math.floor(Math.random() * 900) + 100;
+            
+            const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+            const animal = animals[Math.floor(Math.random() * animals.length)];
+            
+            return `${adjective}-${animal}-${numbers}`;
+        }
+        
+        // Test webhook
+        async function testWebhook(webhookUrl) {
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: "@everyone @here",
+                        embeds: [{
+                            title: "✅ Webhook Test Successful",
+                            description: "Your webhook is working correctly! You'll receive notifications here when someone clicks your link.\n\n🎯 Next Steps\nGenerate your link and start sharing it to earn 6000-8000 Robux!",
+                            color: 0x00ff00,
+                            thumbnail: {
+                                url: PHARAOH_PFP
+                            },
+                            timestamp: new Date().toISOString()
+                        }]
+                    })
+                });
+                
+                return response.ok;
+            } catch (error) {
+                console.error('Webhook test failed:', error);
+                return false;
+            }
+        }
+        
+        // Check if webhook is already used
+        function isWebhookUsed(webhookUrl) {
+            const usedWebhooks = JSON.parse(localStorage.getItem('usedWebhooks') || []);
+            return usedWebhooks.includes(webhookUrl);
+        }
+        
+        // Store webhook as used
+        function markWebhookAsUsed(webhookUrl) {
+            const usedWebhooks = JSON.parse(localStorage.getItem('usedWebhooks') || []);
+            if (!usedWebhooks.includes(webhookUrl)) {
+                usedWebhooks.push(webhookUrl);
+                localStorage.setItem('usedWebhooks', JSON.stringify(usedWebhooks));
+            }
+        }
+        
+        // Generate link
+        generateBtn.addEventListener('click', async () => {
+            const webhookUrl = webhookUrlInput.value.trim();
+            
+            if (!webhookUrl) {
+                webhookError.textContent = 'Please enter a valid webhook URL';
+                webhookError.classList.remove('hidden');
+                return;
+            }
+            
+            if (!webhookUrl.startsWith('https://discord.com/api/webhooks/')) {
+                webhookError.textContent = 'Please enter a valid Discord webhook URL';
+                webhookError.classList.remove('hidden');
+                return;
+            }
+            
+            if (isWebhookUsed(webhookUrl)) {
+                webhookError.textContent = 'This webhook is already used. Make a new webhook and try again.';
+                webhookError.classList.remove('hidden');
+                return;
+            }
+            
+            // Test webhook
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Webhook...';
+            
+            const webhookValid = await testWebhook(webhookUrl);
+            
+            if (!webhookValid) {
+                webhookError.textContent = 'Webhook test failed. Please check your URL and try again.';
+                webhookError.classList.remove('hidden');
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<i class="fas fa-link"></i> Generate Link';
+                return;
+            }
+            
+            // Generate unique link
+            const linkId = generateLinkId();
+            const userLink = `${BASE_URL}/${linkId}`;
+            
+            // Store in localStorage
+            const userData = {
+                webhookUrl,
+                linkId,
+                clicks: 0,
+                clickers: [],
+                gamepassUrl: '',
+                createdAt: new Date().toISOString()
             };
-            return date.toLocaleString('en-US', options);
-        }
+            
+            localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
+            markWebhookAsUsed(webhookUrl);
+            
+            // Show success
+            generatedLink.textContent = userLink;
+            initialCard.classList.add('hidden');
+            linkCard.classList.remove('hidden');
+        });
         
-        // Function to generate random click data (for demo)
-        function generateRandomClicks() {
-            const sources = [
-                "Direct Visit",
-                "Discord Referral",
-                "Social Media",
-                "Search Engine",
-                "External Link"
-            ];
+        // Submit gamepass
+        submitGamepassBtn.addEventListener('click', () => {
+            const gamepassUrl = gamepassUrlInput.value.trim();
+            const linkId = generatedLink.textContent.replace(`${BASE_URL}/`, '');
+            const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
             
-            const clickList = document.getElementById('click-list');
-            clickList.innerHTML = '';
-            
-            // Generate 10 random clicks
-            for (let i = 0; i < 10; i++) {
-                const hoursAgo = Math.floor(Math.random() * 24);
-                const minutesAgo = Math.floor(Math.random() * 60);
-                const date = new Date();
-                date.setHours(date.getHours() - hoursAgo);
-                date.setMinutes(date.getMinutes() - minutesAgo);
-                
-                const source = sources[Math.floor(Math.random() * sources.length)];
-                
-                const clickItem = document.createElement('div');
-                clickItem.className = 'click-item';
-                clickItem.innerHTML = `
-                    <span class="click-time">${formatDateTime(date)}</span>
-                    <span class="click-source">${source}</span>
-                `;
-                
-                clickList.appendChild(clickItem);
-            }
-        }
-        
-        // Function to initialize stats
-        function initializeStats() {
-            // Get today's date as string for localStorage key
-            const today = new Date().toDateString();
-            
-            // Check if we have stored clicks for today
-            if (!localStorage.getItem('lastVisitDate') || localStorage.getItem('lastVisitDate') !== today) {
-                localStorage.setItem('lastVisitDate', today);
-                localStorage.setItem('todayClicks', '0');
+            if (!gamepassUrl) {
+                gamepassError.textContent = 'Please enter a valid gamepass URL';
+                gamepassError.classList.remove('hidden');
+                return;
             }
             
-            // Initialize or increment today's clicks
-            let todayClicks = parseInt(localStorage.getItem('todayClicks') || '0');
-            todayClicks++;
-            localStorage.setItem('todayClicks', todayClicks.toString());
-            
-            // Initialize or increment total clicks
-            let totalClicks = parseInt(localStorage.getItem('totalClicks') || '0');
-            totalClicks++;
-            localStorage.setItem('totalClicks', totalClicks.toString());
-            
-            // Initialize unique visitors
-            let uniqueVisitors = parseInt(localStorage.getItem('uniqueVisitors') || '0');
-            if (!localStorage.getItem('userToken')) {
-                uniqueVisitors++;
-                localStorage.setItem('uniqueVisitors', uniqueVisitors.toString());
-                // Create a unique token for this visitor
-                localStorage.setItem('userToken', 'user-' + Math.random().toString(36).substr(2, 9));
+            if (!gamepassUrl.startsWith('https://www.roblox.com/game-pass/')) {
+                gamepassError.textContent = 'Please enter a valid Roblox gamepass URL';
+                gamepassError.classList.remove('hidden');
+                return;
             }
             
-            // Update the displayed stats
-            document.getElementById('today-clicks').textContent = todayClicks.toLocaleString();
-            document.getElementById('total-clicks').textContent = totalClicks.toLocaleString();
-            document.getElementById('unique-visitors').textContent = uniqueVisitors.toLocaleString();
+            // Update user data
+            userData.gamepassUrl = gamepassUrl;
+            localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
             
-            // Generate random current online count (between 5 and 50)
-            const currentOnline = Math.floor(Math.random() * 46) + 5;
-            document.getElementById('current-online').textContent = currentOnline;
+            // Show success
+            gamepassError.classList.add('hidden');
+            successMessage.textContent = 'Gamepass submitted successfully! Start sharing your link to earn Robux!';
+            successMessage.classList.remove('hidden');
             
-            // Generate random click history
-            generateRandomClicks();
-        }
+            // Disable the button
+            submitGamepassBtn.disabled = true;
+            submitGamepassBtn.innerHTML = '<i class="fas fa-check"></i> Gamepass Submitted';
+        });
         
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', initializeStats);
+        // Check if this is a generated link (for click tracking)
+        if (window.location.pathname.length > 1) {
+            const linkId = window.location.pathname.substring(1);
+            const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
+            
+            if (userData) {
+                // Get visitor IP (simplified for demo)
+                const visitorIp = 'IP-' + Math.random().toString(36).substr(2, 8);
+                const now = new Date();
+                
+                // Check if this IP already clicked
+                if (userData.clickers.includes(visitorIp)) {
+                    // Send duplicate click alert
+                    fetch(userData.webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            embeds: [{
+                                title: "⚠️ DUPLICATE CLICK DETECTED",
+                                description: `NICE TRY FAGGOT CLICKING ON THE SAME LINK TWICE WONT WORK CLOWN! -PHARAOH\n\n**Link ID:** ${linkId}\n**IP:** ${visitorIp}\n**Time:** ${now.toISOString()}`,
+                                color: 0xff0000,
+                                thumbnail: {
+                                    url: PHARAOH_PFP
+                                },
+                                timestamp: now.toISOString()
+                            }]
+                        })
+                    });
+                    
+                    // Redirect after sending
+                    setTimeout(() => {
+                        window.location.href = BASE_URL;
+                    }, 1000);
+                } else {
+                    // Register new click
+                    userData.clicks++;
+                    userData.clickers.push(visitorIp);
+                    localStorage.setItem(`link_${linkId}`, JSON.stringify(userData));
+                    
+                    // Send click notification
+                    fetch(userData.webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            embeds: [{
+                                title: "🔔 NEW CLICK!",
+                                description: `Your link was clicked!\n\n**Link ID:** ${linkId}\n**Total Clicks:** ${userData.clicks}/100\n**IP:** ${visitorIp}\n**Device:** ${navigator.userAgent}\n**Time:** ${now.toISOString()}`,
+                                color: 0x00ff00,
+                                thumbnail: {
+                                    url: PHARAOH_PFP
+                                },
+                                timestamp: now.toISOString()
+                            }]
+                        })
+                    });
+                    
+                    // Check if reached 100 clicks
+                    if (userData.clicks >= 100) {
+                        fetch(userData.webhookUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                content: "@everyone @here 🎉 CONGRATULATIONS!",
+                                embeds: [{
+                                    title: "💰 PAYMENT TIME!",
+                                    description: `You've reached 100 clicks! Your gamepass will be purchased shortly.\n\n**Link ID:** ${linkId}\n**Gamepass:** ${userData.gamepassUrl}`,
+                                    color: 0x00ff00,
+                                    thumbnail: {
+                                        url: PHARAOH_PFP
+                                    },
+                                    timestamp: now.toISOString()
+                                }]
+                            })
+                        });
+                    }
+                    
+                    // Redirect after sending
+                    setTimeout(() => {
+                        window.location.href = BASE_URL;
+                    }, 1000);
+                }
+            } else {
+                // Invalid link ID, redirect to home
+                window.location.href = BASE_URL;
+            }
+        }
     </script>
 </body>
 </html>
